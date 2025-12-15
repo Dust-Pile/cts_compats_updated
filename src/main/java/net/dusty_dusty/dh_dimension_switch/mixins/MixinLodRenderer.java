@@ -6,6 +6,7 @@ import com.seibel.distanthorizons.core.render.RenderBufferHandler;
 import com.seibel.distanthorizons.core.render.renderer.*;
 import com.seibel.distanthorizons.core.render.renderer.generic.GenericObjectRenderer;
 import com.seibel.distanthorizons.core.util.math.Mat4f;
+import com.seibel.distanthorizons.core.wrapperInterfaces.minecraft.IMinecraftClientWrapper;
 import com.seibel.distanthorizons.core.wrapperInterfaces.minecraft.IProfilerWrapper;
 import net.dusty_dusty.dh_dimension_switch.ILodRenderer;
 import net.dusty_dusty.dh_dimension_switch.LodRenderChecker;
@@ -49,6 +50,10 @@ public abstract class MixinLodRenderer implements ILodRenderer {
         }
     }
 
+    ///=======================///
+    /// Rendering Suppression ///
+    ///=======================///
+
     @Redirect( method = "renderLodPass(Lcom/seibel/distanthorizons/core/render/renderer/RenderParams;Lcom/seibel/distanthorizons/core/wrapperInterfaces/minecraft/IProfilerWrapper;Z)V",
             at = @At(
                 value = "INVOKE",
@@ -67,20 +72,21 @@ public abstract class MixinLodRenderer implements ILodRenderer {
         }
     }
 
-    @Redirect( method = "renderLodPass(Lcom/seibel/distanthorizons/core/render/renderer/RenderParams;Lcom/seibel/distanthorizons/core/wrapperInterfaces/minecraft/IProfilerWrapper;Z)V",
-            at = @At(
-                value = "INVOKE",
-                target = "Lcom/seibel/distanthorizons/core/render/renderer/generic/GenericObjectRenderer;render(Lcom/seibel/distanthorizons/api/methods/events/sharedParameterObjects/DhApiRenderParam;Lcom/seibel/distanthorizons/core/wrapperInterfaces/minecraft/IProfilerWrapper;Z)V"
-        ), remap = false
-    )
-    public void genericRenderProxy(
-            GenericObjectRenderer instance,
-            DhApiRenderParam boxGroup,
-            IProfilerWrapper iProfilerWrapper,
-            boolean renderEventParam
-    ){
-        if ( LodRenderChecker.shouldRender() ) instance.render( boxGroup, iProfilerWrapper, renderEventParam );
-    }
+    // Generic Objects should be rendered (Clouds, beacons)
+//    @Redirect( method = "renderLodPass(Lcom/seibel/distanthorizons/core/render/renderer/RenderParams;Lcom/seibel/distanthorizons/core/wrapperInterfaces/minecraft/IProfilerWrapper;Z)V",
+//            at = @At(
+//                value = "INVOKE",
+//                target = "Lcom/seibel/distanthorizons/core/render/renderer/generic/GenericObjectRenderer;render(Lcom/seibel/distanthorizons/api/methods/events/sharedParameterObjects/DhApiRenderParam;Lcom/seibel/distanthorizons/core/wrapperInterfaces/minecraft/IProfilerWrapper;Z)V"
+//        ), remap = false
+//    )
+//    public void genericRenderProxy(
+//            GenericObjectRenderer instance,
+//            DhApiRenderParam boxGroup,
+//            IProfilerWrapper iProfilerWrapper,
+//            boolean renderEventParam
+//    ){
+//        if ( LodRenderChecker.shouldRender() ) instance.render( boxGroup, iProfilerWrapper, renderEventParam );
+//    }
 
     @Redirect( method = "renderLodPass(Lcom/seibel/distanthorizons/core/render/renderer/RenderParams;Lcom/seibel/distanthorizons/core/wrapperInterfaces/minecraft/IProfilerWrapper;Z)V",
             at = @At(
@@ -109,7 +115,7 @@ public abstract class MixinLodRenderer implements ILodRenderer {
     ){
         if ( LodRenderChecker.shouldRender() ) instance.render( modelViewProjectionMatrix, partialTicks );
     }
-    
+
     @Redirect( method = "renderLodPass(Lcom/seibel/distanthorizons/core/render/renderer/RenderParams;Lcom/seibel/distanthorizons/core/wrapperInterfaces/minecraft/IProfilerWrapper;Z)V",
             at = @At(
             value = "INVOKE",
