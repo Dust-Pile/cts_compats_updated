@@ -16,6 +16,7 @@ public class LodRenderChecker {
         assert CLIENT.player != null;
         if( !CLIENT.level.dimensionType().hasCeiling() ) {
             shouldRun = !CLIENT.level.dimension().equals( Level.OVERWORLD ) || CLIENT.player.position().y > 40;
+            return;
         }
         shouldRun = false;
     }
