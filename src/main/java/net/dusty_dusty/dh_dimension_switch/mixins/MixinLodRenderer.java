@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin( LodRenderer.class )
 public abstract class MixinLodRenderer implements ILodRenderer {
 
-    @Shadow
+    @Shadow( remap = false )
     protected abstract void renderLodPass(IDhApiShaderProgram shaderProgram, RenderBufferHandler lodBufferHandler, RenderParams renderEventParam, boolean opaquePass);
 
     @Unique
