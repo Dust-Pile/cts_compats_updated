@@ -1,12 +1,9 @@
 package net.dusty_dusty.dh_dimension_switch.mixins;
 
 import com.seibel.distanthorizons.api.interfaces.override.rendering.IDhApiShaderProgram;
-import com.seibel.distanthorizons.api.methods.events.sharedParameterObjects.DhApiRenderParam;
 import com.seibel.distanthorizons.core.render.RenderBufferHandler;
 import com.seibel.distanthorizons.core.render.renderer.*;
-import com.seibel.distanthorizons.core.render.renderer.generic.GenericObjectRenderer;
 import com.seibel.distanthorizons.core.util.math.Mat4f;
-import com.seibel.distanthorizons.core.wrapperInterfaces.minecraft.IMinecraftClientWrapper;
 import com.seibel.distanthorizons.core.wrapperInterfaces.minecraft.IProfilerWrapper;
 import net.dusty_dusty.dh_dimension_switch.ILodRenderer;
 import net.dusty_dusty.dh_dimension_switch.LodRenderChecker;
