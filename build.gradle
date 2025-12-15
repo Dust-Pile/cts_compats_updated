@@ -178,7 +178,8 @@ dependencies {
 
     compileOnly fg.deobf("maven.modrinth:DistantHorizonsApi:4.0.1")
 
-    implementation fg.deobf("curse.maven:DistantHorizons-508933:6791186")
+    //implementation fg.deobf("curse.maven:DistantHorizons-508933:6791186")
+    implementation fg.deobf("curse.maven:distant-horizons-508933:7334195")
 }
 
 mixin {

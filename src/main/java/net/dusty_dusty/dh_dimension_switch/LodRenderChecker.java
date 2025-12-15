@@ -9,18 +9,14 @@ public class LodRenderChecker {
 
     public static boolean shouldRender(){
         return shouldRun;
-        //return true;
     }
 
-    public static boolean updateRender() {
-//        assert CLIENT.level != null;
-//        assert CLIENT.player != null;
+    public static void updateRender() {
+        assert CLIENT.level != null;
+        assert CLIENT.player != null;
         if( !CLIENT.level.dimensionType().hasCeiling() ) {
             shouldRun = !CLIENT.level.dimension().equals( Level.OVERWORLD ) || CLIENT.player.position().y > 40;
-            return shouldRun;
         }
         shouldRun = false;
-        return false;
-        //return true;
     }
 }
