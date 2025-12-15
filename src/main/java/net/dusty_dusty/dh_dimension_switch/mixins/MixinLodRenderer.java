@@ -7,7 +7,6 @@ import com.seibel.distanthorizons.core.render.renderer.*;
 import com.seibel.distanthorizons.core.render.renderer.generic.GenericObjectRenderer;
 import com.seibel.distanthorizons.core.util.math.Mat4f;
 import com.seibel.distanthorizons.core.wrapperInterfaces.minecraft.IProfilerWrapper;
-import com.seibel.distanthorizons.core.wrapperInterfaces.world.IClientLevelWrapper;
 import net.dusty_dusty.dh_dimension_switch.ILodRenderer;
 import net.dusty_dusty.dh_dimension_switch.LodRenderChecker;
 import org.spongepowered.asm.mixin.Mixin;
@@ -38,7 +37,7 @@ public abstract class MixinLodRenderer implements ILodRenderer {
      * @param ci unused
      */
     @Inject( method = "renderLodPass(Lcom/seibel/distanthorizons/core/render/renderer/RenderParams;Lcom/seibel/distanthorizons/core/wrapperInterfaces/minecraft/IProfilerWrapper;Z)V",
-            at = @At( "HEAD" ))
+            at = @At( "HEAD" ), remap = false )
     private void onRenderLodPass(
             RenderParams renderParams,
             IProfilerWrapper profiler,
@@ -54,7 +53,7 @@ public abstract class MixinLodRenderer implements ILodRenderer {
             at = @At(
                 value = "INVOKE",
                 target = "Lcom/seibel/distanthorizons/core/render/renderer/LodRenderer;renderLodPass(Lcom/seibel/distanthorizons/api/interfaces/override/rendering/IDhApiShaderProgram;Lcom/seibel/distanthorizons/core/render/RenderBufferHandler;Lcom/seibel/distanthorizons/core/render/renderer/RenderParams;Z)V"
-        )
+        ), remap = false
     )
     private void renderLodPassProxy(
             LodRenderer instance,
@@ -115,7 +114,8 @@ public abstract class MixinLodRenderer implements ILodRenderer {
             at = @At(
             value = "INVOKE",
             target = "Lcom/seibel/distanthorizons/core/render/renderer/DhFadeRenderer;render(Lcom/seibel/distanthorizons/core/util/math/Mat4f;Lcom/seibel/distanthorizons/core/util/math/Mat4f;FLcom/seibel/distanthorizons/core/wrapperInterfaces/minecraft/IProfilerWrapper;)V"
-    ))
+        ), remap = false
+    )
     public void fadeRenderProxy(
             DhFadeRenderer instance,
             Mat4f height,
@@ -125,17 +125,4 @@ public abstract class MixinLodRenderer implements ILodRenderer {
     ){
         if ( LodRenderChecker.shouldRender() ) instance.render( height, e, v, mcModelViewMatrix );
     }
-
-//    @Redirect( method = "renderTransparentBuffersAndFireApiEvent", at = @At(
-//            value = "INVOKE",
-//            target = "Lcom/seibel/distanthorizons/core/render/RenderBufferHandler;renderTransparent(Lcom/seibel/distanthorizons/core/render/renderer/LodRenderer;Lcom/seibel/distanthorizons/api/methods/events/sharedParameterObjects/DhApiRenderParam;)V"
-//        ), remap = false
-//    )
-//    public void renderTransparentProxy(
-//            RenderBufferHandler instance,
-//            LodRenderer renderContext,
-//            DhApiRenderParam renderEventParam
-//    ){
-//        if ( LodRenderChecker.shouldRender() ) instance.renderTransparent( renderContext, renderEventParam );
-//    }
 }

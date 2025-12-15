@@ -176,7 +176,7 @@ dependencies {
     // https://github.com/SpongePowered/Mixin/wiki/Mixins-on-Minecraft-Forge
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    compileOnly fg.deobf("maven.modrinth:DistantHorizonsApi:4.0.1")
+    compileOnly fg.deobf("maven.modrinth:DistantHorizonsApi:5.0.0")
 
     //implementation fg.deobf("curse.maven:DistantHorizons-508933:6791186")
     implementation fg.deobf("curse.maven:distant-horizons-508933:7334195")

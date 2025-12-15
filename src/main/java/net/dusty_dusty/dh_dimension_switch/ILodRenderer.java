@@ -6,6 +6,6 @@ import com.seibel.distanthorizons.core.render.renderer.RenderParams;
 
 public interface ILodRenderer {
 
-    public void dhds$renderLodPass(IDhApiShaderProgram shaderProgram, RenderBufferHandler lodBufferHandler, RenderParams renderEventParam, boolean opaquePass);
+    void dhds$renderLodPass(IDhApiShaderProgram shaderProgram, RenderBufferHandler lodBufferHandler, RenderParams renderEventParam, boolean opaquePass);
 
 }
