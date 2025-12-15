@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin( DhFadeRenderer.class )
-public class MixinFadeRenderer {
+public class MixinDhFadeRenderer {
 
     @Redirect( method = "render", at = @At(
             value = "INVOKE",

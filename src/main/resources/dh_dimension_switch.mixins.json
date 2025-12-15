@@ -4,8 +4,9 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "dh_dimension_switch.refmap.json",
   "mixins": [
-    "MixinFadeRenderer",
-    "MixinLodRenderer"
+    "MixinDhFadeRenderer",
+    "MixinLodRenderer",
+    "MixinVanillaFadeRenderer"
   ],
   "client": [
   ],

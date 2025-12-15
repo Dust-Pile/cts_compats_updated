@@ -109,21 +109,20 @@ public abstract class MixinLodRenderer implements ILodRenderer {
     ){
         if ( LodRenderChecker.shouldRender() ) instance.render( modelViewProjectionMatrix, partialTicks );
     }
-
-    // Not working for some reason?
-//    @Redirect( method = "renderLodPass(Lcom/seibel/distanthorizons/core/render/renderer/RenderParams;Lcom/seibel/distanthorizons/core/wrapperInterfaces/minecraft/IProfilerWrapper;Z)V",
-//            at = @At(
-//            value = "INVOKE",
-//            target = "Lcom/seibel/distanthorizons/core/render/renderer/DhFadeRenderer;render(Lcom/seibel/distanthorizons/core/util/math/Mat4f;Lcom/seibel/distanthorizons/core/util/math/Mat4f;FLcom/seibel/distanthorizons/core/wrapperInterfaces/minecraft/IProfilerWrapper;)V"
-//        ), remap = false
-//    )
-//    public void fadeRenderProxy(
-//            DhFadeRenderer instance,
-//            Mat4f height,
-//            Mat4f e,
-//            float v,
-//            IProfilerWrapper mcModelViewMatrix
-//    ){
-//        if ( LodRenderChecker.shouldRender() ) instance.render( height, e, v, mcModelViewMatrix );
-//    }
+    
+    @Redirect( method = "renderLodPass(Lcom/seibel/distanthorizons/core/render/renderer/RenderParams;Lcom/seibel/distanthorizons/core/wrapperInterfaces/minecraft/IProfilerWrapper;Z)V",
+            at = @At(
+            value = "INVOKE",
+            target = "Lcom/seibel/distanthorizons/core/render/renderer/DhFadeRenderer;render(Lcom/seibel/distanthorizons/core/util/math/Mat4f;Lcom/seibel/distanthorizons/core/util/math/Mat4f;FLcom/seibel/distanthorizons/core/wrapperInterfaces/minecraft/IProfilerWrapper;)V"
+        ), remap = false
+    )
+    public void fadeRenderProxy(
+            DhFadeRenderer instance,
+            Mat4f height,
+            Mat4f e,
+            float v,
+            IProfilerWrapper mcModelViewMatrix
+    ){
+        if ( LodRenderChecker.shouldRender() ) instance.render( height, e, v, mcModelViewMatrix );
+    }
 }
