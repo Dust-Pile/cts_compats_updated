@@ -1,4 +1,4 @@
-package net.dusty_dusty.dh_dimension_switch;
+package net.dusty_dusty.cts_compats;
 
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
@@ -9,13 +9,13 @@ import org.slf4j.Logger;
 
 
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod(Dh_dimension_switch.MODID)
-public class Dh_dimension_switch
+@Mod(CTSCompats.MODID)
+public class CTSCompats
 {
-    public static final String MODID = "dh_dimension_switch";
+    public static final String MODID = "cts_compats";
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public Dh_dimension_switch( FMLJavaModLoadingContext context )
+    public CTSCompats(FMLJavaModLoadingContext context )
     {
         IEventBus modEventBus = context.getModEventBus();
 
