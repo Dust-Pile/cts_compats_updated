@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 public class CTSCompats
 {
     public static final String MODID = "cts_compats";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public CTSCompats(FMLJavaModLoadingContext context )
     {
