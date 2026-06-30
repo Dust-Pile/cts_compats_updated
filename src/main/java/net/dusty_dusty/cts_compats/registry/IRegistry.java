@@ -10,13 +10,6 @@ import java.util.Collection;
 import java.util.Optional;
 
 public interface IRegistry {
-    String PVJ_MODID = "projectvibrantjourneys";
-    String BOP_MODID = "biomesoplenty";
-    String VB_MODID = "vanillabackport";
-    String MEADOW_MODID = "meadow";
-    String IW_MODID = "immersive_weathering";
-    String QUARK_MODID = "quark";
-
     String getModID();
 
     void assign();

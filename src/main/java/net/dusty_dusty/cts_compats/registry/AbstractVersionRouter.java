@@ -10,6 +10,11 @@ import java.util.*;
 import java.util.function.Supplier;
 
 public abstract class AbstractVersionRouter implements IRegistry {
+    public static final IRegistry EMPTY_REGISTRY = new EmptyRegistry();
+    public static boolean isEmpty( IRegistry registry ) {
+        return registry == EMPTY_REGISTRY;
+    }
+
     private final Map<? extends Comparable<Version>, Supplier<IRegistry>> VERSION_FILTER;
     final IRegistry REGISTRY;
     protected final String REGISTRY_ID;
@@ -34,7 +39,7 @@ public abstract class AbstractVersionRouter implements IRegistry {
         }
         String err = "No filter matches version " + version + " of mod " + modid + " in registered version router (no compatibility available for mod version).";
         CTSCompats.LOGGER.error( err );
-        throw new IllegalArgumentException( err );
+        return EMPTY_REGISTRY;
     }
 
     public void clientSetup() {
@@ -55,5 +60,16 @@ public abstract class AbstractVersionRouter implements IRegistry {
 
     public Collection<RegistryObject<Block>> getRegistryBlocks() {
         return REGISTRY.getRegistryBlocks();
+    }
+
+    private static class EmptyRegistry extends AbstractRegistry {
+        protected EmptyRegistry() {
+            super(" ");
+        }
+
+        @Override
+        public Optional<IColorRegistry> getColorRegistry() {
+            return Optional.empty();
+        }
     }
 }

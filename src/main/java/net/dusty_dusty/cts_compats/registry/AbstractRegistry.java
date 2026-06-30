@@ -14,14 +14,22 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import static net.dusty_dusty.cts_compats.CTSCompats.MODID;
 
 public abstract class AbstractRegistry implements IRegistry {
+    private static final ArrayList<RegistryObject<Block>> cutoutRender = new ArrayList<>();
+    @SuppressWarnings("removal")
+    public static void setRenderTypes() {
+        cutoutRender.forEach( blockRegistryObject ->
+                ItemBlockRenderTypes.setRenderLayer( blockRegistryObject.get(), RenderType.cutout() ));
+    }
+
+
     protected final DeferredRegister<Block> COMPAT_BLOCKS = DeferredRegister.create( ForgeRegistries.BLOCKS, MODID );
     protected final DeferredRegister<Item> COMPAT_ITEMS = DeferredRegister.create( ForgeRegistries.ITEMS, MODID );
-    private static final ArrayList<RegistryObject<Block>> cutoutRender = new ArrayList<>();
     protected final String REGISTRY_ID;
 
     protected AbstractRegistry ( String modId ) {
@@ -58,13 +66,6 @@ public abstract class AbstractRegistry implements IRegistry {
                 ( (IAssignable) block ).assign();
             }
         });
-        assignExtras();
-    }
-
-    @SuppressWarnings("removal")
-    public static void setRenderTypes() {
-        cutoutRender.forEach( blockRegistryObject ->
-                ItemBlockRenderTypes.setRenderLayer( blockRegistryObject.get(), RenderType.cutout() ));
     }
 
     @SuppressWarnings("unchecked")
@@ -74,10 +75,7 @@ public abstract class AbstractRegistry implements IRegistry {
         return output;
     }
 
-    protected void assignExtras() {}
-
     public Collection<RegistryObject<Block>> getRegistryBlocks() {
         return COMPAT_BLOCKS.getEntries();
     }
-
 }
