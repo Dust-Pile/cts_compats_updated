@@ -1,7 +1,5 @@
 package net.dusty_dusty.cts_compats.registry;
 
-import net.dusty_dusty.cts_compats.CTSCompats;
-import net.dusty_dusty.cts_compats.block.IAssignable;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.BlockItem;
@@ -14,7 +12,6 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 import static net.dusty_dusty.cts_compats.CTSCompats.MODID;
@@ -58,14 +55,6 @@ public abstract class AbstractRegistry implements IRegistry {
     }
 
     public void assign() {
-        this.COMPAT_BLOCKS.getEntries().forEach( entry -> {
-            Block block = entry.get();
-            CTSCompats.LOGGER.info( block.getDescriptionId() );
-            if ( block instanceof IAssignable) {
-                CTSCompats.LOGGER.info( block.getDescriptionId() );
-                ( (IAssignable) block ).assign();
-            }
-        });
     }
 
     @SuppressWarnings("unchecked")

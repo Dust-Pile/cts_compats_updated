@@ -123,6 +123,9 @@ public final class RegistryManager {
         }
     }
 
+    /**
+     * Safe register mod compats for optional dependency.
+     */
     private static boolean runModCompat( String modid, Runnable register ) {
         if ( ModList.get().isLoaded( modid ) ) {
             LOADED_VERSIONS.put( modid, new Version( ModList.get().getModFileById( modid ).versionString() ) );
@@ -132,5 +135,4 @@ public final class RegistryManager {
         }
         return false;
     }
-
 }

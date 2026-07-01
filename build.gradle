@@ -99,7 +99,7 @@ repositories {
 
     maven { url = "https://api.modrinth.com/maven" }
 
-//    flatDir { dir 'libs' }
+    flatDir { dir 'libs' }
 }
 
 dependencies {
@@ -109,7 +109,8 @@ dependencies {
 
     // Terrain Slabs
     implementation fg.deobf("curse.maven:architectury-api-419699:5137938")
-    implementation fg.deobf("curse.maven:countereds-terrain-slabs-1125437:7892343")
+    // implementation fg.deobf("curse.maven:countereds-terrain-slabs-1125437:8339700")
+    implementation fileTree(dir: 'libs', include: '*.jar')
 
 }
 
