@@ -31,6 +31,8 @@ println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty '
 minecraft {
     mappings channel: mapping_channel, version: mapping_version
 
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
     copyIdeResources = true
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -111,6 +113,9 @@ dependencies {
     implementation fg.deobf("curse.maven:architectury-api-419699:5137938")
     // implementation fg.deobf("curse.maven:countereds-terrain-slabs-1125437:8339700")
     implementation fileTree(dir: 'libs', include: '*.jar')
+
+    // Compats
+    compileOnly fg.deobf("curse.maven:biomes-o-plenty-220318:6364065")
 
 }
 

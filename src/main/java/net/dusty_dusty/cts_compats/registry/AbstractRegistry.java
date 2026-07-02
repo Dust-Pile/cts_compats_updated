@@ -1,5 +1,6 @@
 package net.dusty_dusty.cts_compats.registry;
 
+import net.countered.terrainslabs.api.OffsetClasses;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.BlockItem;
@@ -12,6 +13,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import static net.dusty_dusty.cts_compats.CTSCompats.MODID;
@@ -24,6 +26,12 @@ public abstract class AbstractRegistry implements IRegistry {
                 ItemBlockRenderTypes.setRenderLayer( blockRegistryObject.get(), RenderType.cutout() ));
     }
 
+    public static void registerOffsetClasses( OffsetClasses.Category category, Collection<Class<?>> classes ) {
+        classes.forEach( clazz -> OffsetClasses.addDefaultClass( clazz, category) );
+    }
+    public static void registerOffsetClasses( String category, Collection<Class<?>> classes ) {
+        classes.forEach( clazz -> OffsetClasses.addDefaultClass( clazz, category) );
+    }
 
     protected final DeferredRegister<Block> COMPAT_BLOCKS = DeferredRegister.create( ForgeRegistries.BLOCKS, MODID );
     protected final DeferredRegister<Item> COMPAT_ITEMS = DeferredRegister.create( ForgeRegistries.ITEMS, MODID );
