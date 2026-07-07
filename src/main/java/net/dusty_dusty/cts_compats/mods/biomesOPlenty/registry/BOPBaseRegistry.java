@@ -1,5 +1,6 @@
 package net.dusty_dusty.cts_compats.mods.biomesOPlenty.registry;
 
+import biomesoplenty.block.*;
 import net.countered.terrainslabs.api.OffsetClasses;
 import net.countered.terrainslabs.block.customslabs.specialslabs.CustomSlab;
 import net.dusty_dusty.cts_compats.CTSCompats;
@@ -15,7 +16,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Optional;
-import java.util.Set;
 
 @SuppressWarnings("unused")
 public class BOPBaseRegistry extends AbstractRegistry {
@@ -55,10 +55,6 @@ public class BOPBaseRegistry extends AbstractRegistry {
             () -> new FleshSlab( BOPReference.POROUS_FLESH ) );
     public static final RegistryObject<Block> BRIMSTONE_SLAB = INSTANCE.registerBlock( "brimstone_slab",
             () -> new CustomSlab( BOPReference.BRIMSTONE ) );
-
-    static {
-        registerOffsetClasses( OffsetClasses.Category.ONTOP_VEGETATION, Set.of() );
-    }
 
     @Override
     @SuppressWarnings("removal")

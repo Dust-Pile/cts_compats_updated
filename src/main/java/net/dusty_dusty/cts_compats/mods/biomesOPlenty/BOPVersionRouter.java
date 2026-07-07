@@ -1,7 +1,7 @@
 package net.dusty_dusty.cts_compats.mods.biomesOPlenty;
 
-import net.dusty_dusty.cts_compats.mods.biomesOPlenty.registry.BOPBaseRegistry;
 import net.dusty_dusty.cts_compats.mods.biomesOPlenty.registry.BOPBetaRegistry;
+import net.dusty_dusty.cts_compats.mods.biomesOPlenty.registry.BOPReleaseRegistry;
 import net.dusty_dusty.cts_compats.registry.AbstractVersionRouter;
 import net.dusty_dusty.cts_compats.registry.IRegistry;
 import net.dusty_dusty.cts_compats.registry.Version;
@@ -16,7 +16,7 @@ import static net.dusty_dusty.cts_compats.CTSCompats.BOP_MODID;
 public final class BOPVersionRouter extends AbstractVersionRouter {
     private static final Map<Version.Range, Supplier<IRegistry>> VERSION_MAP = new HashMap<>();
     static {
-        VERSION_MAP.put( Version.Range.acceptCustom( "18.0.0.592", "19.0.0.96", true, false ), () -> BOPBaseRegistry.getInstance() );
+        VERSION_MAP.put( Version.Range.acceptCustom( "18.0.0.592", "19.0.0.96", true, false ), () -> BOPReleaseRegistry.getInstance() );
         VERSION_MAP.put( Version.Range.acceptLaterThanInclusive( "19.0.0.96" ), () -> BOPBetaRegistry.getInstance() );
     }
 

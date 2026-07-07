@@ -1,12 +1,17 @@
 package net.dusty_dusty.cts_compats.mods.biomesOPlenty.registry;
 
 import biomesoplenty.api.block.BOPBlocks;
+import net.countered.terrainslabs.api.OffsetClasses;
 import net.dusty_dusty.cts_compats.CTSCompats;
 import net.dusty_dusty.cts_compats.mods.biomesOPlenty.block.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.Set;
+
+import static net.dusty_dusty.cts_compats.registry.AbstractRegistry.registerOffsetClasses;
 
 @SuppressWarnings("unused")
 public final class BOPBetaRegistry {
@@ -29,4 +34,28 @@ public final class BOPBetaRegistry {
             () -> new ThermalCalciteSlab( BOPBlocks.THERMAL_CALCITE ) );
     public static RegistryObject<Block> THERMAL_CALCITE_VENT_SLAB = INSTANCE.registerBlock( "thermal_calcite_vent_slab",
             () -> new ThermalCalciteVentSlab( BOPBlocks.THERMAL_CALCITE_VENT ) );
+
+    static {
+        try {
+            registerOffsetClasses( OffsetClasses.Category.ONTOP_VEGETATION, Set.of(
+                    Class.forName("biomesoplenty.block.BlackstoneDecorationBlock"),
+                    Class.forName("biomesoplenty.block.BrimstoneBudBlock"),
+                    Class.forName("biomesoplenty.block.BrimstoneFumaroleBlock"),
+                    Class.forName("biomesoplenty.block.HairBlock"),
+                    Class.forName("biomesoplenty.block.PusBubbleBlock"),
+                    Class.forName("biomesoplenty.block.HighGrassPlantBlock"),
+                    Class.forName("biomesoplenty.block.HighGrassBlock"),
+                    Class.forName("biomesoplenty.block.SpiderEggBlock")
+            ) );
+
+            registerOffsetClasses( OffsetClasses.Category.ONBOTTOM_VEGETATION, Set.of(
+                    Class.forName("biomesoplenty.block.HangingStrandBlock"),
+                    Class.forName("biomesoplenty.block.HangingStrandBottomBlock"),
+                    Class.forName("biomesoplenty.block.SpanishMossBottomBlock"),
+                    Class.forName("biomesoplenty.block.SpanishMossBlock")
+            ) );
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
