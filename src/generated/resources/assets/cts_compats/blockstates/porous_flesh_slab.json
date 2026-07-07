@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "cts_compats:block/porous_flesh_slab"
+    },
+    "type=double": {
+      "model": "biomesoplenty:block/porous_flesh"
+    },
+    "type=top": {
+      "model": "cts_compats:block/porous_flesh_slab_top"
+    }
+  }
+}

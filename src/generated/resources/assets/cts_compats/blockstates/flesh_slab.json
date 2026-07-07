@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "cts_compats:block/flesh_slab"
+    },
+    "type=double": {
+      "model": "biomesoplenty:block/flesh"
+    },
+    "type=top": {
+      "model": "cts_compats:block/flesh_slab_top"
+    }
+  }
+}

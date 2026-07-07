@@ -1,0 +1,59 @@
+{
+  "variants": {
+    "type=bottom,distance=1": {
+      "model": "cts_compats:block/thermal_calcite/thermal_calcite_slab_vent_1"
+    },
+    "type=double,distance=1": {
+      "model": "biomesoplenty:block/thermal_calcite_vent"
+    },
+    "type=top,distance=1": {
+      "model": "cts_compats:block/thermal_calcite/thermal_calcite_slab_top_vent_1"
+    },
+
+    "type=bottom,distance=2": {
+      "model": "cts_compats:block/thermal_calcite/thermal_calcite_slab_vent_2"
+    },
+    "type=double,distance=2": {
+      "model": "biomesoplenty:block/thermal_calcite_vent_2"
+    },
+    "type=top,distance=2": {
+      "model": "cts_compats:block/thermal_calcite/thermal_calcite_slab_top_vent_2"
+    },
+
+    "type=bottom,distance=3": {
+      "model": "cts_compats:block/thermal_calcite/thermal_calcite_slab_vent_3"
+    },
+    "type=double,distance=3": {
+      "model": "biomesoplenty:block/thermal_calcite_vent_3"
+    },
+    "type=top,distance=3": {
+      "model": "cts_compats:block/thermal_calcite/thermal_calcite_slab_top_vent_3"
+    },
+
+    "type=bottom,distance=4": {
+      "model": "cts_compats:block/thermal_calcite/thermal_calcite_slab_vent_4"
+    },
+    "type=double,distance=4": {
+      "model": "biomesoplenty:block/thermal_calcite_vent_4"
+    },
+    "type=top,distance=4": {
+      "model": "cts_compats:block/thermal_calcite/thermal_calcite_slab_top_vent_4"
+    },
+
+    "type=bottom,distance=5": {
+      "model": "cts_compats:block/thermal_calcite/thermal_calcite_slab_vent_5"
+    },
+    "type=double,distance=5": {
+      "model": "biomesoplenty:block/thermal_calcite_vent_5"
+    },
+    "type=top,distance=5": {
+      "model": "cts_compats:block/thermal_calcite/thermal_calcite_slab_top_vent_5"
+    }
+  }
+}
+
+
+
+
+
+

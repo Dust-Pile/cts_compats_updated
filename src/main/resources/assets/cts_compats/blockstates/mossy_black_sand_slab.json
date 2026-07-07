@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "cts_compats:block/mossy_black_sand_slab"
+    },
+    "type=double": {
+      "model": "biomesoplenty:block/mossy_black_sand"
+    },
+    "type=top": {
+      "model": "cts_compats:block/mossy_black_sand_slab_top"
+    }
+  }
+}

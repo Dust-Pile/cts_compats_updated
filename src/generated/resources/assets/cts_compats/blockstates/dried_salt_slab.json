@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "cts_compats:block/dried_salt_slab"
+    },
+    "type=double": {
+      "model": "biomesoplenty:block/dried_salt"
+    },
+    "type=top": {
+      "model": "cts_compats:block/dried_salt_slab_top"
+    }
+  }
+}

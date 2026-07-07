@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "cts_compats:block/algal_end_stone_slab"
+    },
+    "type=double": {
+      "model": "biomesoplenty:block/algal_end_stone"
+    },
+    "type=top": {
+      "model": "cts_compats:block/algal_end_stone_slab_top"
+    }
+  }
+}
