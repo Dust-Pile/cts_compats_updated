@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
  * Targets include all vanilla classes that need to be modified
  */
 @SuppressWarnings({"MixinAnnotationTarget", "InvalidInjectorMethodSignature"})
-@Mixin( remap = false, targets = {
+@Mixin( targets = {
         "biomesoplenty.block.WildflowerBlock",
         "biomesoplenty.block.YellowMapleLeavesBlock",
         "biomesoplenty.block.BlackstoneDecorationBlock",

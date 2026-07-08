@@ -4,7 +4,8 @@ import net.countered.terrainslabs.api.IAttachedFaceOffset;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin( remap = false, targets = {
-        "BrambleLeavesBlock"
+        "biomesoplenty.common.block.BrambleLeavesBlock",
+        "biomesoplenty.block.BrambleLeavesBlock"
 })
 public class AttachedFaceAssigner implements IAttachedFaceOffset {
 }
