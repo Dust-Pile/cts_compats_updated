@@ -118,6 +118,10 @@ dependencies {
     implementation fileTree(dir: 'libs', include: '*.jar')
 
     // Compats
+    compileOnly fg.deobf("curse.maven:quark-243121:6427817")
+    compileOnly fg.deobf("curse.maven:immersive-weathering-forge-592449:6116941")
+    compileOnly fg.deobf("curse.maven:lets-do-meadow-821483:6467344")
+    compileOnly fg.deobf("curse.maven:vanillabackport-417430:8229712")
     compileOnly fg.deobf("curse.maven:biomes-o-plenty-220318:6364065")
 
 }

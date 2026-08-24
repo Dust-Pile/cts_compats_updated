@@ -24,6 +24,6 @@ public final class VanillaRegistry extends AbstractRegistry {
         return Optional.empty();
     }
 
-    public static final RegistryObject<Block> DRIPSTONE_SLAB =
-            INSTANCE.registerBlock( "dripstone_slab", () -> new CustomSlab( Blocks.DRIPSTONE_BLOCK ) );
+    public static final RegistryObject<Block> DRIPSTONE_SLAB = INSTANCE.registerBlock( "dripstone_slab",
+            () -> new CustomSlab( Blocks.DRIPSTONE_BLOCK ) );
 }

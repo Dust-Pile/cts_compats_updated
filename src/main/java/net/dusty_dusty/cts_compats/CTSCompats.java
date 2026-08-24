@@ -1,7 +1,10 @@
 package net.dusty_dusty.cts_compats;
 
 import com.mojang.logging.LogUtils;
+import net.dusty_dusty.cts_compats.mods.MeadowRegistry;
+import net.dusty_dusty.cts_compats.mods.QuarkRegistry;
 import net.dusty_dusty.cts_compats.mods.biomesOPlenty.BOPVersionRouter;
+import net.dusty_dusty.cts_compats.mods.vanillaBackport.VanillaBackportVersionRouter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraftforge.common.MinecraftForge;
@@ -45,9 +48,9 @@ public class CTSCompats
 
 //        REGISTRY_MANAGER.register( PVJ_MODID, () -> PVJRegistry.getInstance() );
         REGISTRY_MANAGER.register( BOP_MODID, () -> BOPVersionRouter.getInstance() );
-//        REGISTRY_MANAGER.register( VB_MODID, () -> VanillaBackportRegistry.getInstance() );
-//        REGISTRY_MANAGER.register( MEADOW_MODID, () -> MeadowRegistry.getInstance() );
-//        REGISTRY_MANAGER.register( QUARK_MODID, () -> QuarkRegistry.getInstance() );
+        REGISTRY_MANAGER.register( VB_MODID, () -> VanillaBackportVersionRouter.getInstance() );
+        REGISTRY_MANAGER.register( MEADOW_MODID, () -> MeadowRegistry.getInstance() );
+        REGISTRY_MANAGER.register( QUARK_MODID, () -> QuarkRegistry.getInstance() );
     }
 
     private void registerCreativeTabItems( BuildCreativeModeTabContentsEvent event ) {
