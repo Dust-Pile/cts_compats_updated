@@ -1,4 +1,4 @@
-package net.dusty_dusty.cts_compats.mixins.biomesOPlenty;
+package net.dusty_dusty.cts_compats.mixins;
 
 import net.countered.terrainslabs.api.IFacedOffsetable;
 import org.spongepowered.asm.mixin.Mixin;

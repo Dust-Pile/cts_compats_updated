@@ -4,8 +4,8 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "cts_compats.refmap.json",
   "mixins": [
-    "biomesOPlenty.AttachedFaceAssigner",
-    "biomesOPlenty.FacedAssigner",
+    "AttachedFaceAssigner",
+    "FacedAssigner",
     "biomesOPlenty.MixinBlocks",
     "biomesOPlenty.MixinBlocksBeta"
   ],

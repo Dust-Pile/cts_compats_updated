@@ -20,16 +20,12 @@ public class BOPReleaseRegistry {
                     Class.forName("biomesoplenty.common.block.BrimstoneFumaroleBlock"),
                     Class.forName("biomesoplenty.common.block.HairBlock"),
                     Class.forName("biomesoplenty.common.block.PusBubbleBlock"),
-                    Class.forName("biomesoplenty.common.block.HighGrassPlantBlock"),
-                    Class.forName("biomesoplenty.common.block.HighGrassBlock"),
-                    Class.forName("biomesoplenty.common.block.SpiderEggBlock")
+                    Class.forName("biomesoplenty.common.block.SpiderEggBlock"),
+                    Class.forName("biomesoplenty.common.block.BrambleLeavesBlock")
             ) );
 
             registerOffsetClasses( OffsetClasses.Category.ONBOTTOM_VEGETATION, Set.of(
-                    Class.forName("biomesoplenty.common.block.HangingStrandBlock"),
-                    Class.forName("biomesoplenty.common.block.HangingStrandBottomBlock"),
-                    Class.forName("biomesoplenty.common.block.SpanishMossBottomBlock"),
-                    Class.forName("biomesoplenty.common.block.SpanishMossBlock")
+                    Class.forName("biomesoplenty.common.block.BrambleLeavesBlock")
             ) );
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);

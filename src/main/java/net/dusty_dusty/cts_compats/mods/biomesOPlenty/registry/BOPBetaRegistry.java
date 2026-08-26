@@ -1,6 +1,7 @@
 package net.dusty_dusty.cts_compats.mods.biomesOPlenty.registry;
 
 import biomesoplenty.api.block.BOPBlocks;
+import biomesoplenty.block.*;
 import net.countered.terrainslabs.api.OffsetClasses;
 import net.dusty_dusty.cts_compats.CTSCompats;
 import net.dusty_dusty.cts_compats.mods.biomesOPlenty.block.*;
@@ -36,26 +37,18 @@ public final class BOPBetaRegistry {
             () -> new ThermalCalciteVentSlab( BOPBlocks.THERMAL_CALCITE_VENT ) );
 
     static {
-        try {
-            registerOffsetClasses( OffsetClasses.Category.ONTOP_VEGETATION, Set.of(
-                    Class.forName("biomesoplenty.block.BlackstoneDecorationBlock"),
-                    Class.forName("biomesoplenty.block.BrimstoneBudBlock"),
-                    Class.forName("biomesoplenty.block.BrimstoneFumaroleBlock"),
-                    Class.forName("biomesoplenty.block.HairBlock"),
-                    Class.forName("biomesoplenty.block.PusBubbleBlock"),
-                    Class.forName("biomesoplenty.block.HighGrassPlantBlock"),
-                    Class.forName("biomesoplenty.block.HighGrassBlock"),
-                    Class.forName("biomesoplenty.block.SpiderEggBlock")
-            ) );
+        registerOffsetClasses( OffsetClasses.Category.ONTOP_VEGETATION, Set.of(
+                BlackstoneDecorationBlock.class,
+                BrimstoneBudBlock.class,
+                BrimstoneFumaroleBlock.class,
+                HairBlock.class,
+                PusBubbleBlock.class,
+                SpiderEggBlock.class,
+                BrambleLeavesBlock.class
+        ) );
 
-            registerOffsetClasses( OffsetClasses.Category.ONBOTTOM_VEGETATION, Set.of(
-                    Class.forName("biomesoplenty.block.HangingStrandBlock"),
-                    Class.forName("biomesoplenty.block.HangingStrandBottomBlock"),
-                    Class.forName("biomesoplenty.block.SpanishMossBottomBlock"),
-                    Class.forName("biomesoplenty.block.SpanishMossBlock")
-            ) );
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        registerOffsetClasses( OffsetClasses.Category.ONBOTTOM_VEGETATION, Set.of(
+                BrambleLeavesBlock.class
+        ) );
     }
 }
