@@ -1,6 +1,8 @@
 package net.dusty_dusty.cts_compats.mods.vanillaBackport;
 
+import com.blackgear.vanillabackport.common.level.blocks.SpeleothemBlock;
 import com.blackgear.vanillabackport.common.registries.ModBlocks;
+import net.countered.terrainslabs.api.OffsetClasses;
 import net.countered.terrainslabs.block.customslabs.specialslabs.CustomSlab;
 import net.dusty_dusty.cts_compats.CTSCompats;
 import net.dusty_dusty.cts_compats.registry.AbstractRegistry;
@@ -9,6 +11,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Optional;
+import java.util.Set;
 
 @SuppressWarnings("unused")
 public class VanillaBackportSulfurRegistry extends AbstractRegistry {
@@ -29,5 +32,15 @@ public class VanillaBackportSulfurRegistry extends AbstractRegistry {
     @Override
     public Optional<IColorRegistry> getColorRegistry() {
         return Optional.empty();
+    }
+
+    static {
+        registerOffsetClasses( OffsetClasses.Category.ONTOP_VEGETATION, Set.of(
+                SpeleothemBlock.class
+        ) );
+
+        registerOffsetClasses( OffsetClasses.Category.ONBOTTOM_VEGETATION, Set.of(
+                SpeleothemBlock.class
+        ) );
     }
 }

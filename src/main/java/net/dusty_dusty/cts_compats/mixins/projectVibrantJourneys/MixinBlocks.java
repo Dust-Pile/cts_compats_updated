@@ -12,8 +12,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-import java.util.logging.Logger;
-
 @SuppressWarnings({"MixinAnnotationTarget", "InvalidInjectorMethodSignature"})
 @Mixin( targets = {
         "dev.orderedchaos.projectvibrantjourneys.common.blocks.CindercaneBlock",

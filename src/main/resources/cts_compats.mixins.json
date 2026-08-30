@@ -7,8 +7,11 @@
     "biomesOPlenty.BOPAttachedFaceAssigner",
     "biomesOPlenty.MixinBlocks",
     "biomesOPlenty.MixinBlocksBeta",
+    "meadow.FacedOffsettableAssigner",
+    "meadow.MixinBlocks",
     "projectVibrantJourneys.MixinBlocks",
-    "projectVibrantJourneys.MixinIcicleBlock"
+    "projectVibrantJourneys.MixinIcicleBlock",
+    "vanillaBackport.MixinSpeleothemBlock"
   ],
   "client": [
   ],
