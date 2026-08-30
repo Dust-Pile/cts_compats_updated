@@ -4,10 +4,11 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "cts_compats.refmap.json",
   "mixins": [
-    "AttachedFaceAssigner",
-    "FacedAssigner",
+    "biomesOPlenty.BOPAttachedFaceAssigner",
     "biomesOPlenty.MixinBlocks",
-    "biomesOPlenty.MixinBlocksBeta"
+    "biomesOPlenty.MixinBlocksBeta",
+    "projectVibrantJourneys.MixinBlocks",
+    "projectVibrantJourneys.MixinIcicleBlock"
   ],
   "client": [
   ],

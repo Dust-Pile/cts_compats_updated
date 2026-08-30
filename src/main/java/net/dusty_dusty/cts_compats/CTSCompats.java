@@ -2,6 +2,7 @@ package net.dusty_dusty.cts_compats;
 
 import com.mojang.logging.LogUtils;
 import net.dusty_dusty.cts_compats.mods.MeadowRegistry;
+import net.dusty_dusty.cts_compats.mods.PVJRegistry;
 import net.dusty_dusty.cts_compats.mods.QuarkRegistry;
 import net.dusty_dusty.cts_compats.mods.biomesOPlenty.BOPVersionRouter;
 import net.dusty_dusty.cts_compats.mods.vanillaBackport.VanillaBackportVersionRouter;
@@ -14,7 +15,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod(CTSCompats.MODID)
 public class CTSCompats
 {
@@ -46,7 +46,7 @@ public class CTSCompats
 
         MinecraftForge.EVENT_BUS.register(this);
 
-//        REGISTRY_MANAGER.register( PVJ_MODID, () -> PVJRegistry.getInstance() );
+        REGISTRY_MANAGER.register( PVJ_MODID, () -> PVJRegistry.getInstance() );
         REGISTRY_MANAGER.register( BOP_MODID, () -> BOPVersionRouter.getInstance() );
         REGISTRY_MANAGER.register( VB_MODID, () -> VanillaBackportVersionRouter.getInstance() );
         REGISTRY_MANAGER.register( MEADOW_MODID, () -> MeadowRegistry.getInstance() );

@@ -10,40 +10,23 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 
 /**
  * Targets include all vanilla classes that need to be modified
  */
 @SuppressWarnings("UnresolvedMixinReference")
-@Mixin( targets = {
+@Pseudo
+@Mixin( remap = false, targets = {
         "biomesoplenty.common.block.BlackstoneDecorationBlock",
         "biomesoplenty.common.block.BrimstoneBudBlock",
         "biomesoplenty.common.block.BrimstoneClusterBlock",
-        "biomesoplenty.common.block.FoliageBlockBOP",
         "biomesoplenty.common.block.BrimstoneFumaroleBlock",
-        "biomesoplenty.common.block.FleshTendonsBlock",
-        "biomesoplenty.common.block.HangingStrandBlock",
-        "biomesoplenty.common.block.FleshTendonsBottomBlock",
-        "biomesoplenty.common.block.HangingStrandBottomBlock",
-        "biomesoplenty.common.block.EyebulbBlock",
         "biomesoplenty.common.block.HairBlock",
         "biomesoplenty.common.block.PusBubbleBlock",
-        "biomesoplenty.common.block.SpanishMossBottomBlock",
-        "biomesoplenty.common.block.SpanishMossBlock",
-        "biomesoplenty.common.block.HighGrassBlock",
-        "biomesoplenty.common.block.HighGrassPlantBlock",
         "biomesoplenty.common.block.BrambleLeavesBlock",
-        "biomesoplenty.common.block.MushroomBlockBOP",
-        "biomesoplenty.common.block.GlowwormSilkBottomBlock",
-        "biomesoplenty.common.block.GlowwormSilkBlock",
-        "biomesoplenty.common.block.SpiderEggBlock",
-        "biomesoplenty.common.block.HangingCobwebBottomBlock",
-        "biomesoplenty.common.block.HangingCobwebBlock",
-        "biomesoplenty.common.block.DoubleWaterPlantBlock",
-        "biomesoplenty.common.block.DoubleWatersidePlantBlock",
-        "biomesoplenty.common.block.SeaOatsBlock",
-        "biomesoplenty.common.block.FlowerBlockBOP"
+        "biomesoplenty.common.block.SpiderEggBlock"
 })
 public class MixinBlocks {
     /**

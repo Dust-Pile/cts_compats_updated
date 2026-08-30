@@ -107,6 +107,7 @@ repositories {
 dependencies {
     // Base
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    compileOnly(annotationProcessor 'org.spongepowered:mixin:0.8.5:processor')
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.4"))
     implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.5.4")) {
         jarJar.ranged(it, "[0.5.4,)")
@@ -123,6 +124,7 @@ dependencies {
     compileOnly fg.deobf("curse.maven:lets-do-meadow-821483:6467344")
     compileOnly fg.deobf("curse.maven:vanillabackport-417430:8229712")
     compileOnly fg.deobf("curse.maven:biomes-o-plenty-220318:6364065")
+    compileOnly fg.deobf("curse.maven:project-vibrant-journeys-300297:8198495")
 
 }
 
