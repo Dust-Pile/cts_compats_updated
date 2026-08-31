@@ -11,5 +11,9 @@
   "block.cts_compats.porous_flesh_slab": "Porous Flesh Slab",
   "block.cts_compats.thermal_calcite_slab": "Thermal Calcite Slab",
   "block.cts_compats.thermal_calcite_vent_slab": "Thermal Calcite Vent Slab",
-  "block.cts_compats.white_sand_slab": "White Sand Slab"
+  "block.cts_compats.white_sand_slab": "White Sand Slab",
+  "block.cts_compats.limestone_slab": "Limestone Slab",
+  "block.cts_compats.quark_limestone_slab": "Limestone Slab",
+  "block.cts_compats.cinnabar_slab": "Cinnabar Slab",
+  "block.cts_compats.sulfur_slab": "Sulfur Slab"
 }
