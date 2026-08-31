@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class VanillaBackportVersionRouter extends AbstractVersionRouter {
+public final class VanillaBackportVersionRouter extends AbstractVersionRouter {
     private static final Map<Version.Range, Supplier<IRegistry>> VERSION_MAP = new HashMap<>();
     static {
         VERSION_MAP.put( Version.Range.acceptCustom( "*", "1.1.7", true, false ), () -> VanillaBackportBaseRegistry.getInstance() );
@@ -21,7 +21,7 @@ public class VanillaBackportVersionRouter extends AbstractVersionRouter {
         return INSTANCE;
     }
 
-    protected VanillaBackportVersionRouter(String modId, Map<? extends Comparable<Version>, Supplier<IRegistry>> versionFilter) {
+    private VanillaBackportVersionRouter(String modId, Map<? extends Comparable<Version>, Supplier<IRegistry>> versionFilter) {
         super(modId, versionFilter);
     }
 }

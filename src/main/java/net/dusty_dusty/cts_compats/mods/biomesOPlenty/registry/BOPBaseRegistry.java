@@ -18,10 +18,10 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.Optional;
 
 @SuppressWarnings("unused")
-public class BOPBaseRegistry extends AbstractRegistry {
-    protected static final BOPBaseRegistry INSTANCE = new BOPBaseRegistry( CTSCompats.BOP_MODID );
-    protected Optional<IColorRegistry> colorRegistry;
-    protected BOPBaseRegistry( String modId ) {
+public final class BOPBaseRegistry extends AbstractRegistry {
+    public static final BOPBaseRegistry INSTANCE = new BOPBaseRegistry( CTSCompats.BOP_MODID );
+    public Optional<IColorRegistry> colorRegistry;
+    public BOPBaseRegistry( String modId ) {
         super(modId);
         colorRegistry = Optional.of( new BOPBaseColorRegistry() );
     }

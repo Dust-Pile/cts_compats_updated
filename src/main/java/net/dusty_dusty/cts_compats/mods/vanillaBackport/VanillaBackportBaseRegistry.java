@@ -11,13 +11,13 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.Optional;
 
 @SuppressWarnings("unused")
-public class VanillaBackportBaseRegistry extends AbstractRegistry {
+public final class VanillaBackportBaseRegistry extends AbstractRegistry {
     private static final VanillaBackportBaseRegistry INSTANCE = new VanillaBackportBaseRegistry( CTSCompats.VB_MODID );
     public static VanillaBackportBaseRegistry getInstance() {
         return INSTANCE;
     }
 
-    protected VanillaBackportBaseRegistry(String modId) {
+    private VanillaBackportBaseRegistry(String modId) {
         super(modId);
     }
 

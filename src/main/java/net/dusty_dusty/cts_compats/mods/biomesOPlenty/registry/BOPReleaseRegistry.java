@@ -6,7 +6,7 @@ import java.util.Set;
 
 import static net.dusty_dusty.cts_compats.registry.AbstractRegistry.registerOffsetClasses;
 
-public class BOPReleaseRegistry {
+public final class BOPReleaseRegistry {
     public static BOPBaseRegistry INSTANCE = BOPBaseRegistry.getInstance();
     public static BOPBaseRegistry getInstance() {
         return INSTANCE;

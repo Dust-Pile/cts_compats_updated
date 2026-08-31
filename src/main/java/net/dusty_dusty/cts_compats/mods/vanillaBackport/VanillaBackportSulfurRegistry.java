@@ -14,13 +14,13 @@ import java.util.Optional;
 import java.util.Set;
 
 @SuppressWarnings("unused")
-public class VanillaBackportSulfurRegistry extends AbstractRegistry {
+public final class VanillaBackportSulfurRegistry extends AbstractRegistry {
     private static final VanillaBackportBaseRegistry INSTANCE = VanillaBackportBaseRegistry.getInstance();
     public static VanillaBackportBaseRegistry getInstance() {
         return INSTANCE;
     }
 
-    protected VanillaBackportSulfurRegistry(String modId) {
+    private VanillaBackportSulfurRegistry(String modId) {
         super(modId);
     }
 

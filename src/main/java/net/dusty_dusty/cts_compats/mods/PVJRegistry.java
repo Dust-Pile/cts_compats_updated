@@ -9,9 +9,9 @@ import java.util.Optional;
 import java.util.Set;
 
 @SuppressWarnings("unused")
-public class PVJRegistry extends AbstractRegistry {
+public final class PVJRegistry extends AbstractRegistry {
     private static final PVJRegistry INSTANCE = new PVJRegistry( CTSCompats.PVJ_MODID );
-    protected PVJRegistry(String modId) {
+    private PVJRegistry(String modId) {
         super(modId);
     }
 

@@ -15,17 +15,17 @@ import java.util.Optional;
 import java.util.Set;
 
 @SuppressWarnings("unused")
-public class MeadowRegistry extends AbstractRegistry {
+public final class MeadowRegistry extends AbstractRegistry {
     private static final MeadowRegistry INSTANCE = new MeadowRegistry( CTSCompats.MEADOW_MODID );
     public static MeadowRegistry getInstance() {
         return INSTANCE;
     }
 
-    protected MeadowRegistry(String modId) {
+    private MeadowRegistry(String modId) {
         super(modId);
     }
 
-    public static RegistryObject<Block> LIMESTONE_SLAB = INSTANCE.registerBlockCutout( "limestone_slab",
+    public static RegistryObject<Block> LIMESTONE_SLAB = INSTANCE.registerBlock( "limestone_slab",
             () -> new CustomSlab( ObjectRegistry.LIMESTONE.get() ) );
 
     @Override
@@ -37,10 +37,6 @@ public class MeadowRegistry extends AbstractRegistry {
         registerOffsetClasses( OffsetClasses.Category.ONTOP_MISC, Set.of(
                 OilLantern.class, StorageBlock.class, DoormatBlock.class, CameraBlock.class,
                 FireLog.class, CanBlock.class
-        ) );
-
-        registerOffsetClasses( OffsetClasses.Category.ONBOTTOM_MISC, Set.of(
-                ClimbingRopeBlock.class, ClimbingRopeTopmountBlock.class
         ) );
     }
 }

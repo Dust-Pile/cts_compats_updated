@@ -1,4 +1,4 @@
-package net.dusty_dusty.cts_compats.mixins.meadow;
+package net.dusty_dusty.cts_compats.mixins;
 
 import dev.polymixin.api.DynamicTargets;
 import net.countered.terrainslabs.api.IFacedOffsetable;
@@ -12,5 +12,5 @@ import org.spongepowered.asm.mixin.Mixin;
         "net.satisfy.meadow.core.block.CanBlock"
 })
 @DynamicTargets
-public class FacedOffsettableAssigner implements IFacedOffsetable {
+public class MeadowAssigner implements IFacedOffsetable {
 }

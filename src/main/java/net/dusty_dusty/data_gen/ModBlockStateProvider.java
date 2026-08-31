@@ -33,9 +33,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         RegistryManager.forEachRegistry( registry -> {
             for ( RegistryObject<Block> entry : registry.getRegistryBlocks() ) {
                 Block block = entry.get();
-                if ( block instanceof ISlabCopy slabCopy
-                        //&& slabCopy.getCopyModelType() == ISlabCopy.CopyModelType.CUBE
-                ) {
+                if ( block instanceof ISlabCopy slabCopy ) {
                     slabCopyFromCube( slabCopy );
                 }
             }

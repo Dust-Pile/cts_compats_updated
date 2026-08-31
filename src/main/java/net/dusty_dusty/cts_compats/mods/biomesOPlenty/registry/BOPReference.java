@@ -5,7 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class BOPReference {
+public final class BOPReference {
 
     public static Block WHITE_SAND = getBlock( "white_sand" );
     public static Block ORANGE_SAND = getBlock( "orange_sand" );
