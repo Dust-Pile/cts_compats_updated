@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "cts_compats:block/quark_limestone_slab"
+    },
+    "type=double": {
+      "model": "quark:block/limestone"
+    },
+    "type=top": {
+      "model": "cts_compats:block/quark_limestone_slab_top"
+    }
+  }
+}
