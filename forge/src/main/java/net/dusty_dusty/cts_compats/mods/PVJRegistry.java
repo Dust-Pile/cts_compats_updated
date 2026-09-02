@@ -7,6 +7,7 @@ import net.dusty_dusty.cts_compats.registry.AbstractRegistry;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
 public final class PVJRegistry extends AbstractRegistry {
@@ -20,7 +21,7 @@ public final class PVJRegistry extends AbstractRegistry {
     }
 
     @Override
-    public Optional<net.dusty_dusty.cts_compats.registry.IColorRegistry> getColorRegistry() {
+    public Optional<Supplier<net.dusty_dusty.cts_compats.registry.IColorRegistry>> getColorRegistry() {
         return Optional.empty();
     }
 

@@ -1,18 +1,19 @@
 package net.dusty_dusty.cts_compats.mods;
 
 import dev.orderedchaos.projectvibrantjourneys.common.blocks.*;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.countered.terrainslabs.api.OffsetClasses;
 import net.countered.terrainslabs.block.customslabs.specialslabs.CustomSlab;
 import net.dusty_dusty.cts_compats.CTSCompats;
 import net.dusty_dusty.cts_compats.registry.AbstractRegistry;
 import net.dusty_dusty.cts_compats.registry.IColorRegistry;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.RegistryObject;
 import net.satisfy.meadow.core.block.*;
 import net.satisfy.meadow.core.registry.ObjectRegistry;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
 public final class MeadowRegistry extends AbstractRegistry {
@@ -25,11 +26,11 @@ public final class MeadowRegistry extends AbstractRegistry {
         super(modId);
     }
 
-    public static RegistryObject<Block> LIMESTONE_SLAB = INSTANCE.registerBlock( "limestone_slab",
+    public static RegistrySupplier<Block> LIMESTONE_SLAB = INSTANCE.registerBlock( "limestone_slab",
             () -> new CustomSlab( ObjectRegistry.LIMESTONE.get() ) );
 
     @Override
-    public Optional<IColorRegistry> getColorRegistry() {
+    public Optional<Supplier<IColorRegistry>> getColorRegistry() {
         return Optional.empty();
     }
 

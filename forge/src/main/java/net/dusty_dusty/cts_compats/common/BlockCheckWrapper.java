@@ -1,5 +1,6 @@
 package net.dusty_dusty.cts_compats.common;
 
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
@@ -7,7 +8,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,7 +53,7 @@ public class BlockCheckWrapper {
         this.blockTagOption = Optional.empty();
         this.functionOption = Optional.empty();
     }
-    public BlockCheckWrapper( RegistryObject<Block> block ) {
+    public BlockCheckWrapper( RegistrySupplier<Block> block ) {
         this.blockOption = Optional.of( block.get() );
         this.blockTagOption = Optional.empty();
         this.functionOption = Optional.empty();
@@ -118,7 +118,7 @@ public class BlockCheckWrapper {
                     //noinspection unchecked
                     this.add( new BlockCheckWrapper( ( TagKey<Block> ) key ) );
                     continue;
-                } else if ( object instanceof RegistryObject<?> regObj && regObj.get() instanceof Block block ) {
+                } else if ( object instanceof RegistrySupplier<?> regObj && regObj.get() instanceof Block block ) {
                     this.add( new BlockCheckWrapper( block ) );
                     continue;
                 }
@@ -130,7 +130,7 @@ public class BlockCheckWrapper {
             this.add( new BlockCheckWrapper( block ) );
             return this;
         }
-        public Group add( RegistryObject<Block> blockRegister ) {
+        public Group add( RegistrySupplier<Block> blockRegister ) {
             this.add( new BlockCheckWrapper( blockRegister ) );
             return this;
         }

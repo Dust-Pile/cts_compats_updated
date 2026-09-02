@@ -1,5 +1,6 @@
 package net.dusty_dusty.data_gen.loot;
 
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.countered.terrainslabs.block.interfaces.ISlabCopy;
 import net.dusty_dusty.cts_compats.CTSCompats;
 import net.dusty_dusty.cts_compats.RegistryManager;
@@ -13,7 +14,6 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public final class ModBlockLootTables extends BlockLootSubProvider {
         }
 
         RegistryManager.forEachRegistryAndID( ( modId, registry ) -> {
-            for ( RegistryObject<Block> blockRegister : registry.getRegistryBlocks() ) {
+            for ( RegistrySupplier<? extends Block> blockRegister : registry.getRegistryBlocks() ) {
                 Block block = blockRegister.get();
                 Block originBlock = ( (ISlabCopy) block ).getOriginBlock();
 

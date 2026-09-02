@@ -2,13 +2,13 @@ package net.dusty_dusty.cts_compats.mods.biomesOPlenty.registry;
 
 import biomesoplenty.api.block.BOPBlocks;
 import biomesoplenty.block.*;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.countered.terrainslabs.api.OffsetClasses;
 import net.dusty_dusty.cts_compats.CTSCompats;
 import net.dusty_dusty.cts_compats.mods.biomesOPlenty.block.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Set;
 
@@ -29,11 +29,11 @@ public final class BOPBetaRegistry {
     }
 
     // Slabs
-    public static RegistryObject<Block> ALGAL_END_STONE_SLAB = INSTANCE.registerBlock( "algal_end_stone_slab",
+    public static RegistrySupplier<Block> ALGAL_END_STONE_SLAB = INSTANCE.registerBlock( "algal_end_stone_slab",
             () -> new AlgalEndStoneSlab( BOPBlocks.ALGAL_END_STONE, getBlock( "terrainslabs", "endstone_slab" ) ) );
-    public static RegistryObject<Block> THERMAL_CALCITE_SLAB = INSTANCE.registerBlock( "thermal_calcite_slab",
+    public static RegistrySupplier<Block> THERMAL_CALCITE_SLAB = INSTANCE.registerBlock( "thermal_calcite_slab",
             () -> new ThermalCalciteSlab( BOPBlocks.THERMAL_CALCITE ) );
-    public static RegistryObject<Block> THERMAL_CALCITE_VENT_SLAB = INSTANCE.registerBlock( "thermal_calcite_vent_slab",
+    public static RegistrySupplier<Block> THERMAL_CALCITE_VENT_SLAB = INSTANCE.registerBlock( "thermal_calcite_vent_slab",
             () -> new ThermalCalciteVentSlab( BOPBlocks.THERMAL_CALCITE_VENT ) );
 
     static {

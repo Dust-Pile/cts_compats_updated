@@ -1,6 +1,7 @@
 package net.dusty_dusty.data_gen;
 
 import com.google.gson.JsonObject;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.countered.terrainslabs.block.interfaces.ISlabCopy;
 import net.dusty_dusty.cts_compats.CTSCompats;
 import net.dusty_dusty.cts_compats.RegistryManager;
@@ -14,7 +15,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.io.IOException;
 
@@ -31,7 +31,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         RegistryManager.forEachRegistry( registry -> {
-            for ( RegistryObject<Block> entry : registry.getRegistryBlocks() ) {
+            for ( RegistrySupplier<? extends Block> entry : registry.getRegistryBlocks() ) {
                 Block block = entry.get();
                 if ( block instanceof ISlabCopy slabCopy ) {
                     slabCopyFromCube( slabCopy );
