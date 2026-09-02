@@ -42,8 +42,16 @@ dependencies {
     modCompileOnly "curse.maven:biomes-o-plenty-220318:6364065"
     modCompileOnly "curse.maven:project-vibrant-journeys-300297:8198495"
 
+    testImplementation "org.junit.jupiter:junit-jupiter:5.10.2"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher:1.10.2"
+    testRuntimeOnly project(path: ":common", configuration: "namedElements")
+
     common(project(path: ":common", configuration: "namedElements")) { transitive = false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+}
+
+tasks.named("test") {
+    useJUnitPlatform()
 }
 
 processResources {
