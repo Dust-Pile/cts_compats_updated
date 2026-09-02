@@ -32,23 +32,23 @@ public final class BOPBaseRegistry extends AbstractRegistry {
 
     // Overworld Blocks
     public static final RegistrySupplier<Block> WHITE_SAND_SLAB = INSTANCE.registerBlock( "white_sand_slab",
-            () -> BOPSlabFactory.sand(BOPReference.WHITE_SAND) );
+            () -> BOPSlabFactory.sand(BOPReference.WHITE_SAND.get()) );
     public static final RegistrySupplier<Block> ORANGE_SAND_SLAB = INSTANCE.registerBlock( "orange_sand_slab",
-            () -> BOPSlabFactory.sand(BOPReference.ORANGE_SAND) );
+            () -> BOPSlabFactory.sand(BOPReference.ORANGE_SAND.get()) );
     public static final RegistrySupplier<Block> BLACK_SAND_SLAB = INSTANCE.registerBlock( "black_sand_slab",
-            () -> BOPSlabFactory.sand(BOPReference.BLACK_SAND) );
+            () -> BOPSlabFactory.sand(BOPReference.BLACK_SAND.get()) );
     // TODO: mossy black sand texture
     public static final RegistrySupplier<Block> MOSSY_BLACK_SAND_SLAB = INSTANCE.registerBlockCutoutMipped( "mossy_black_sand_slab",
-            () -> BOPSlabFactory.mossyBlackSand(BOPReference.MOSSY_BLACK_SAND) );
+            () -> BOPSlabFactory.mossyBlackSand(BOPReference.MOSSY_BLACK_SAND.get()) );
     public static final RegistrySupplier<Block> DRIED_SALT_SLAB = INSTANCE.registerBlock( "dried_salt_slab",
-            () -> BOPSlabFactory.driedSalt(BOPReference.DRIED_SALT) );
+            () -> BOPSlabFactory.driedSalt(BOPReference.DRIED_SALT.get()) );
 
         // Nether Blocks
     public static final RegistrySupplier<Block> FLESH_SLAB = INSTANCE.registerBlock( "flesh_slab",
-            () -> new FleshSlab( BOPReference.FLESH ) );
+            () -> new FleshSlab( BOPReference.FLESH.get() ) );
     public static final RegistrySupplier<Block> POROUS_FLESH_SLAB = INSTANCE.registerBlock( "porous_flesh_slab",
-            () -> new FleshSlab( BOPReference.POROUS_FLESH ) );
+            () -> new FleshSlab( BOPReference.POROUS_FLESH.get() ) );
     public static final RegistrySupplier<Block> BRIMSTONE_SLAB = INSTANCE.registerBlock( "brimstone_slab",
-            () -> new CustomSlab( BOPReference.BRIMSTONE ) );
+            () -> new CustomSlab( BOPReference.BRIMSTONE.get() ) );
 
 }

@@ -18,7 +18,8 @@
     ]
   },
   "mixins": [
-    "cts_compats-common.mixins.json"
+    "cts_compats-common.mixins.json",
+    "cts_compats-fabric.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${fabric_loader_version}",
@@ -27,5 +28,10 @@
     "minecraft": "${minecraft_version}",
     "java": ">=17",
     "terrain_slabs": ">=4.0.3-beta"
+  },
+  "suggests": {
+    "biomesoplenty": ">=19.0.0.96",
+    "meadow": ">=1.3.25",
+    "vanillabackport": ">=1.1.7.10"
   }
 }
