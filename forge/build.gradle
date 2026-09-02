@@ -30,6 +30,7 @@ dependencies {
     forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
     modImplementation "dev.architectury:architectury-forge:${rootProject.architectury_version}"
     modImplementation "maven.modrinth:SJu6sklj:fhdOSK5I"
+    modRuntimeOnly "maven.modrinth:codAaoxh:EVVb5nP3"
     compileOnly "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
 
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.4"))

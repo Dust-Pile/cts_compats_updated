@@ -2,66 +2,95 @@ package net.dusty_dusty.cts_compats;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Set;
+import java.net.URI;
+import java.net.URL;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CtsCompatsMixinPluginTest {
     @Test
-    void skipsOptionalMixinsWhenTheirModsAreAbsent() {
-        Set<String> loadedMods = Set.of();
+    void checksTargetResourcesWithoutLoadingClasses() throws Exception {
+        URL targetResource = URI.create("file:/present/Target.class").toURL();
+        ClassLoader resourceOnlyLoader = new ClassLoader(null) {
+            @Override
+            public URL getResource(String name) {
+                return name.equals("present/Target.class") ? targetResource : null;
+            }
 
+            @Override
+            protected Class<?> loadClass(String name, boolean resolve) {
+                throw new AssertionError(name);
+            }
+        };
+
+        assertTrue(CtsCompatsMixinPlugin.isClassPresent("present.Target", resourceOnlyLoader));
+        assertFalse(CtsCompatsMixinPlugin.isClassPresent("missing.Target", resourceOnlyLoader));
+    }
+
+    @Test
+    void optionalChecksUseTargetAvailabilityBeforeLoaderState() {
         assertFalse(CtsCompatsMixinPlugin.shouldApplyMixin(
+                "missing.Target",
                 "net.dusty_dusty.cts_compats.mixins.biomesOPlenty.MixinBlocksBeta",
-                loadedMods::contains
-        ));
-        assertFalse(CtsCompatsMixinPlugin.shouldApplyMixin(
-                "net.dusty_dusty.cts_compats.mixins.MeadowAssigner",
-                loadedMods::contains
-        ));
-        assertFalse(CtsCompatsMixinPlugin.shouldApplyMixin(
-                "net.dusty_dusty.cts_compats.mixins.vanillaBackport.MixinSpeleothemBlock",
-                loadedMods::contains
-        ));
-        assertFalse(CtsCompatsMixinPlugin.shouldApplyMixin(
-                "net.dusty_dusty.cts_compats.mixins.projectVibrantJourneys.MixinIcicleBlock",
-                loadedMods::contains
+                target -> false
         ));
     }
 
     @Test
-    void appliesOptionalMixinsWhenTheirModsAreLoaded() {
-        Set<String> loadedMods = Set.of(
-                CTSCompats.BOP_MODID,
-                CTSCompats.MEADOW_MODID,
-                CTSCompats.VB_MODID,
-                CTSCompats.PVJ_MODID
-        );
-
-        assertTrue(CtsCompatsMixinPlugin.shouldApplyMixin(
-                "net.dusty_dusty.cts_compats.mixins.biomesOPlenty.BOPAttachedFaceAssigner",
-                loadedMods::contains
+    void skipsOptionalMixinsWhenTheirTargetsAreAbsent() {
+        assertFalse(CtsCompatsMixinPlugin.shouldApplyMixin(
+                "missing.Target",
+                "net.dusty_dusty.cts_compats.mixins.biomesOPlenty.MixinBlocksBeta",
+                target -> false
         ));
-        assertTrue(CtsCompatsMixinPlugin.shouldApplyMixin(
+        assertFalse(CtsCompatsMixinPlugin.shouldApplyMixin(
+                "missing.Target",
                 "net.dusty_dusty.cts_compats.mixins.MeadowAssigner",
-                loadedMods::contains
+                target -> false
         ));
-        assertTrue(CtsCompatsMixinPlugin.shouldApplyMixin(
+        assertFalse(CtsCompatsMixinPlugin.shouldApplyMixin(
+                "missing.Target",
                 "net.dusty_dusty.cts_compats.mixins.vanillaBackport.MixinSpeleothemBlock",
-                loadedMods::contains
+                target -> false
+        ));
+        assertFalse(CtsCompatsMixinPlugin.shouldApplyMixin(
+                "missing.Target",
+                "net.dusty_dusty.cts_compats.mixins.projectVibrantJourneys.MixinIcicleBlock",
+                target -> false
+        ));
+    }
+
+    @Test
+    void appliesOptionalMixinsWhenTheirTargetsArePresent() {
+        assertTrue(CtsCompatsMixinPlugin.shouldApplyMixin(
+                "present.Target",
+                "net.dusty_dusty.cts_compats.mixins.biomesOPlenty.BOPAttachedFaceAssigner",
+                target -> true
         ));
         assertTrue(CtsCompatsMixinPlugin.shouldApplyMixin(
+                "present.Target",
+                "net.dusty_dusty.cts_compats.mixins.MeadowAssigner",
+                target -> true
+        ));
+        assertTrue(CtsCompatsMixinPlugin.shouldApplyMixin(
+                "present.Target",
+                "net.dusty_dusty.cts_compats.mixins.vanillaBackport.MixinSpeleothemBlock",
+                target -> true
+        ));
+        assertTrue(CtsCompatsMixinPlugin.shouldApplyMixin(
+                "present.Target",
                 "net.dusty_dusty.cts_compats.mixins.projectVibrantJourneys.MixinBlocks",
-                loadedMods::contains
+                target -> true
         ));
     }
 
     @Test
     void appliesMixinsWithoutAnOptionalOwner() {
         assertTrue(CtsCompatsMixinPlugin.shouldApplyMixin(
+                "missing.Target",
                 "net.dusty_dusty.cts_compats.mixins.UnconditionalMixin",
-                modId -> false
+                target -> false
         ));
     }
 }

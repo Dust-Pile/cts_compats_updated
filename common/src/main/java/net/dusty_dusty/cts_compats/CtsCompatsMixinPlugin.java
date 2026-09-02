@@ -1,21 +1,19 @@
 package net.dusty_dusty.cts_compats;
 
-import dev.architectury.platform.Platform;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
 public final class CtsCompatsMixinPlugin implements IMixinConfigPlugin {
-    private static final Map<String, String> OPTIONAL_MIXINS = Map.of(
-            ".mixins.biomesOPlenty.", CTSCompats.BOP_MODID,
-            ".mixins.MeadowAssigner", CTSCompats.MEADOW_MODID,
-            ".mixins.vanillaBackport.", CTSCompats.VB_MODID,
-            ".mixins.projectVibrantJourneys.", CTSCompats.PVJ_MODID
+    private static final Set<String> OPTIONAL_MIXINS = Set.of(
+            ".mixins.biomesOPlenty.",
+            ".mixins.MeadowAssigner",
+            ".mixins.vanillaBackport.",
+            ".mixins.projectVibrantJourneys."
     );
 
     @Override
@@ -29,16 +27,24 @@ public final class CtsCompatsMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        return shouldApplyMixin(mixinClassName, Platform::isModLoaded);
+        return shouldApplyMixin(targetClassName, mixinClassName, CtsCompatsMixinPlugin::isClassPresent);
     }
 
-    static boolean shouldApplyMixin(String mixinClassName, Predicate<String> isModLoaded) {
-        return OPTIONAL_MIXINS.entrySet().stream()
-                .filter(entry -> mixinClassName.contains(entry.getKey()))
-                .findFirst()
-                .map(Map.Entry::getValue)
-                .map(isModLoaded::test)
-                .orElse(true);
+    static boolean shouldApplyMixin(
+            String targetClassName,
+            String mixinClassName,
+            Predicate<String> isClassPresent
+    ) {
+        boolean optional = OPTIONAL_MIXINS.stream().anyMatch(mixinClassName::contains);
+        return !optional || isClassPresent.test(targetClassName);
+    }
+
+    private static boolean isClassPresent(String className) {
+        return isClassPresent(className, CtsCompatsMixinPlugin.class.getClassLoader());
+    }
+
+    static boolean isClassPresent(String className, ClassLoader classLoader) {
+        return classLoader.getResource(className.replace('.', '/') + ".class") != null;
     }
 
     @Override

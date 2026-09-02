@@ -1,4 +1,4 @@
-package net.dusty_dusty.cts_compats.mods;
+package net.dusty_dusty.cts_compats.mods.forge;
 
 import dev.orderedchaos.projectvibrantjourneys.common.blocks.*;
 import net.countered.terrainslabs.api.OffsetClasses;

@@ -1,4 +1,4 @@
-package net.dusty_dusty.cts_compats.mods;
+package net.dusty_dusty.cts_compats.mods.forge;
 
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.countered.terrainslabs.block.customslabs.specialslabs.CustomSlab;
