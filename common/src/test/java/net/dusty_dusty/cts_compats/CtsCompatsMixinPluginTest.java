@@ -29,15 +29,6 @@ class CtsCompatsMixinPluginTest {
     }
 
     @Test
-    void optionalChecksUseTargetAvailabilityBeforeLoaderState() {
-        assertFalse(CtsCompatsMixinPlugin.shouldApplyMixin(
-                "missing.Target",
-                "net.dusty_dusty.cts_compats.mixins.biomesOPlenty.MixinBlocksBeta",
-                target -> false
-        ));
-    }
-
-    @Test
     void skipsOptionalMixinsWhenTheirTargetsAreAbsent() {
         assertFalse(CtsCompatsMixinPlugin.shouldApplyMixin(
                 "missing.Target",

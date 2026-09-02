@@ -60,6 +60,7 @@ processResources {
     def replaceProperties = [
         minecraft_version: rootProject.minecraft_version,
         minecraft_version_range: rootProject.minecraft_version_range,
+        architectury_version: rootProject.architectury_version,
         forge_version: rootProject.forge_version,
         forge_version_range: rootProject.forge_version_range,
         loader_version_range: rootProject.loader_version_range,

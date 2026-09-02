@@ -58,10 +58,15 @@ description='''${mod_description}'''
     ordering="NONE"
     side="BOTH"
 [[dependencies.${mod_id}]]
+    modId="architectury"
+    mandatory=true
+    versionRange="[${architectury_version},)"
+    ordering="AFTER"
+    side="BOTH"
+[[dependencies.${mod_id}]]
     modId="terrain_slabs"
     mandatory=true
-    # versionRange="[4.0.0-beta,)"
-    versionRange="*"
+    versionRange="[4.0.3-beta,)"
     ordering="AFTER"
     side="BOTH"
 [[dependencies.${mod_id}]]
