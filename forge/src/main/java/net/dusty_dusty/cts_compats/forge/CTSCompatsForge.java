@@ -10,7 +10,6 @@ import net.dusty_dusty.cts_compats.mods.QuarkRegistry;
 import net.dusty_dusty.cts_compats.mods.biomesOPlenty.BOPVersionRouter;
 import net.dusty_dusty.cts_compats.mods.vanillaBackport.VanillaBackportVersionRouter;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -19,7 +18,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 @Mod(CTSCompats.MODID)
 public final class CTSCompatsForge {
     public CTSCompatsForge(FMLJavaModLoadingContext context) {
-        initCommon(context.getModEventBus());
+        EventBuses.registerModEventBus(CTSCompats.MODID, context.getModEventBus());
+        CTSCompats.init();
 
         RegistryManager registries = CTSCompats.REGISTRY_MANAGER;
         registries.register(CTSCompats.PVJ_MODID, () -> PVJRegistry.getInstance());
@@ -27,11 +27,6 @@ public final class CTSCompatsForge {
         registries.register(CTSCompats.VB_MODID, () -> VanillaBackportVersionRouter.getInstance());
         registries.register(CTSCompats.MEADOW_MODID, () -> MeadowRegistry.getInstance());
         registries.register(CTSCompats.QUARK_MODID, () -> QuarkRegistry.getInstance());
-    }
-
-    static void initCommon(IEventBus modEventBus) {
-        EventBuses.registerModEventBus(CTSCompats.MODID, modEventBus);
-        CTSCompats.init();
     }
 
     @Mod.EventBusSubscriber(modid = CTSCompats.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
