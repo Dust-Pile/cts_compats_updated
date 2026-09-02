@@ -10,9 +10,11 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 
 @SuppressWarnings({"MixinAnnotationTarget", "InvalidInjectorMethodSignature"})
+@Pseudo
 @Mixin( targets = {
         "biomesoplenty.block.BlackstoneDecorationBlock",
         "biomesoplenty.block.BrimstoneBudBlock",
@@ -58,4 +60,3 @@ public class MixinBlocksBeta {
         );
     }
 }
-
