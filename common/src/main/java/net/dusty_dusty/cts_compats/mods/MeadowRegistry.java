@@ -1,6 +1,5 @@
 package net.dusty_dusty.cts_compats.mods;
 
-import dev.orderedchaos.projectvibrantjourneys.common.blocks.*;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.countered.terrainslabs.api.OffsetClasses;
 import net.countered.terrainslabs.block.customslabs.specialslabs.CustomSlab;

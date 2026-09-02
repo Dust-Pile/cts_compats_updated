@@ -8,7 +8,6 @@ import net.dusty_dusty.cts_compats.registry.IColorRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.satisfy.meadow.core.registry.ObjectRegistry;
 
 import java.util.Optional;
 import java.util.function.Supplier;

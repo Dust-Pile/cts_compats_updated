@@ -1,22 +1,16 @@
 package net.dusty_dusty.cts_compats.mixins.biomesOPlenty;
 
-import biomesoplenty.block.*;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.countered.terrainslabs.api.SlabHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-
-import static net.dusty_dusty.cts_compats.registry.AbstractRegistry.registerOffsetClasses;
 
 @SuppressWarnings({"MixinAnnotationTarget", "InvalidInjectorMethodSignature"})
 @Mixin( targets = {
@@ -63,20 +57,5 @@ public class MixinBlocksBeta {
                 world, pPos, Direction.UP, original, state, world, pos
         );
     }
-
-//    @WrapOperation( method = "animateTick", require = 0, at = @At( value = "INVOKE",
-//            target = "Lnet/minecraft/world/level/Level;m_7106_(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V")
-//    )
-//    private void terrain_slabs$offsetParticles(
-//            Level instance, ParticleOptions particleData,
-//            double x, double y, double z,
-//            double xSpeed, double ySpeed, double zSpeed,
-//            Operation<Void> original,
-//            BlockState state, Level level, BlockPos pos, RandomSource random
-//    ) {
-//        SlabHelper.terrain_slabs$offsetParticles(
-//                instance, particleData, x, y, z, xSpeed, ySpeed, zSpeed, original, state, level, pos, random
-//        );
-//    }
 }
 

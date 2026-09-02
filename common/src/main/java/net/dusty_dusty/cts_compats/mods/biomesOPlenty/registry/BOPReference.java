@@ -1,9 +1,9 @@
 package net.dusty_dusty.cts_compats.mods.biomesOPlenty.registry;
 
 import net.dusty_dusty.cts_compats.CTSCompats;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public final class BOPReference {
 
@@ -17,6 +17,6 @@ public final class BOPReference {
     public static Block BRIMSTONE = getBlock( "brimstone" );
 
     private static Block getBlock( String name ) {
-        return ForgeRegistries.BLOCKS.getValue( ResourceLocation.fromNamespaceAndPath( CTSCompats.BOP_MODID, name ) );
+        return BuiltInRegistries.BLOCK.get(new ResourceLocation(CTSCompats.BOP_MODID, name));
     }
 }

@@ -5,23 +5,17 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.orderedchaos.projectvibrantjourneys.common.blocks.IcicleBlock;
 import dev.orderedchaos.projectvibrantjourneys.core.registry.PVJBlocks;
 import net.countered.terrainslabs.api.IConditionalOffset;
-import net.countered.terrainslabs.api.ICustomOffsetConversion;
 import net.countered.terrainslabs.api.SlabHelper;
 import net.countered.terrainslabs.api.helperInterface.ISpikeConversion;
-import net.countered.terrainslabs.block.OffsetProperty;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DripstoneThickness;
-import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin( IcicleBlock.class )

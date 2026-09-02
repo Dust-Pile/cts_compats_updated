@@ -1,13 +1,13 @@
 package net.dusty_dusty.cts_compats.common;
 
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,8 +15,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-@SuppressWarnings({"UnusedReturnValue", "unused", "OptionalUsedAsFieldOrParameterType"})
+@SuppressWarnings({"UnusedReturnValue", "unused", "OptionalUsedAsFieldOrParameterType", "unchecked"})
 public class BlockCheckWrapper {
+    private static final TagKey<Block> FORGE_SAND = TagKey.create(
+            Registries.BLOCK, new ResourceLocation("forge", "sand")
+    );
+    private static final TagKey<Block> FORGE_GRAVEL = TagKey.create(
+            Registries.BLOCK, new ResourceLocation("forge", "gravel")
+    );
+
     public static final Group SAND_AND_DIRT = new Group();
     public static final Group DIRT_AND_FARMLAND = new Group();
     public static final Group NETHER_FLOOR = new Group();
@@ -24,7 +31,7 @@ public class BlockCheckWrapper {
     static {
         SAND_AND_DIRT.add( BlockTags.SAND );
         SAND_AND_DIRT.add( BlockTags.DIRT );
-        SAND_AND_DIRT.add( Tags.Blocks.SAND );
+        SAND_AND_DIRT.add(FORGE_SAND);
 
         DIRT_AND_FARMLAND.add( BlockTags.DIRT );
         DIRT_AND_FARMLAND.add( Blocks.FARMLAND );
@@ -36,7 +43,7 @@ public class BlockCheckWrapper {
         NETHER_FLOOR.add( Blocks.WARPED_NYLIUM );
 
         WATER_PLANT_PLACEABLE.addAll( SAND_AND_DIRT );
-        WATER_PLANT_PLACEABLE.add( Tags.Blocks.GRAVEL );
+        WATER_PLANT_PLACEABLE.add(FORGE_GRAVEL);
         WATER_PLANT_PLACEABLE.add( Blocks.CLAY );
         WATER_PLANT_PLACEABLE.add( BlockTags.BIG_DRIPLEAF_PLACEABLE );
     }
@@ -114,8 +121,7 @@ public class BlockCheckWrapper {
                 if ( object instanceof Block block ) {
                     this.add( new BlockCheckWrapper( block ) );
                     continue;
-                } else if ( object instanceof TagKey<?> key && key.isFor( ForgeRegistries.BLOCKS.getRegistryKey() ) ) {
-                    //noinspection unchecked
+                } else if (object instanceof TagKey<?> key && key.isFor(Registries.BLOCK)) {
                     this.add( new BlockCheckWrapper( ( TagKey<Block> ) key ) );
                     continue;
                 } else if ( object instanceof RegistrySupplier<?> regObj && regObj.get() instanceof Block block ) {

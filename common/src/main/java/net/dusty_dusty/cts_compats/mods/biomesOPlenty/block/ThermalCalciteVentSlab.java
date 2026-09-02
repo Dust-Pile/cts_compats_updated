@@ -3,7 +3,9 @@ package net.dusty_dusty.cts_compats.mods.biomesOPlenty.block;
 import biomesoplenty.api.damagesource.BOPDamageTypes;
 import biomesoplenty.init.ModParticles;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -22,7 +24,10 @@ public class ThermalCalciteVentSlab extends ThermalCalciteSlab {
 
     public void stepOn(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, Entity entity ) {
         if ( !entity.fireImmune() && entity instanceof LivingEntity livingEntity && !EnchantmentHelper.hasFrostWalker( livingEntity ) ) {
-            entity.hurt( level.damageSources().source( BOPDamageTypes.FUMAROLE ), 1.0F);
+            DamageSource fumarole = new DamageSource(level.registryAccess()
+                    .registryOrThrow(Registries.DAMAGE_TYPE)
+                    .getHolderOrThrow(BOPDamageTypes.FUMAROLE));
+            entity.hurt(fumarole, 1.0F);
         }
 
         super.stepOn( level, pos, state, entity );

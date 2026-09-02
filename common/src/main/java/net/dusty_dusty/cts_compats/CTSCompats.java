@@ -2,7 +2,10 @@ package net.dusty_dusty.cts_compats;
 
 import com.mojang.logging.LogUtils;
 import dev.architectury.event.events.common.LifecycleEvent;
+import net.dusty_dusty.cts_compats.mods.MeadowRegistry;
 import net.dusty_dusty.cts_compats.mods.VanillaRegistry;
+import net.dusty_dusty.cts_compats.mods.biomesOPlenty.BOPVersionRouter;
+import net.dusty_dusty.cts_compats.mods.vanillaBackport.VanillaBackportVersionRouter;
 import org.slf4j.Logger;
 
 public final class CTSCompats {
@@ -23,6 +26,9 @@ public final class CTSCompats {
 
     public static void init() {
         REGISTRY_MANAGER.register("minecraft", VanillaRegistry.getInstance());
+        REGISTRY_MANAGER.register(BOP_MODID, BOPVersionRouter::getInstance);
+        REGISTRY_MANAGER.register(VB_MODID, VanillaBackportVersionRouter::getInstance);
+        REGISTRY_MANAGER.register(MEADOW_MODID, MeadowRegistry::getInstance);
         LifecycleEvent.SETUP.register(REGISTRY_MANAGER::assign);
     }
 }

@@ -17,6 +17,9 @@
       "net.dusty_dusty.cts_compats.fabric.CTSCompatsFabricClient"
     ]
   },
+  "mixins": [
+    "cts_compats-common.mixins.json"
+  ],
   "depends": {
     "fabricloader": ">=${fabric_loader_version}",
     "fabric-api": ">=${fabric_api_version}",

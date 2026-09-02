@@ -1,32 +1,34 @@
 package net.dusty_dusty.cts_compats.mods.biomesOPlenty.block;
 
-import net.countered.terrainslabs.block.customslabs.specialslabs.CustomSlab;
+import net.countered.terrainslabs.block.customslabs.specialslabs.GravityAffectedSlab;
 import net.countered.terrainslabs.block.interfaces.IDuelSlab;
 import net.countered.terrainslabs.block.interfaces.ISlabCopy;
+import net.dusty_dusty.cts_compats.mods.biomesOPlenty.registry.BOPBaseRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.item.FallingBlockEntity;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.lighting.LightEngine;
 import org.jetbrains.annotations.NotNull;
 
-public class AlgalEndStoneSlab extends CustomSlab implements IDuelSlab {
-    private final Block DUEL;
+@SuppressWarnings("deprecation")
+public class MossyBlackSandSlab extends GravityAffectedSlab implements IDuelSlab {
 
-    public AlgalEndStoneSlab( Block originalBlock, Block duel ) {
-        super(originalBlock);
-        this.DUEL = duel;
+    public MossyBlackSandSlab( Block originalBlock ) {
+        super( originalBlock );
     }
 
     @Override
     public ISlabCopy getDuel() {
-        return (ISlabCopy) DUEL;
+        return (ISlabCopy) BOPBaseRegistry.BLACK_SAND_SLAB.get();
     }
 
-    private static boolean canBeGrass(BlockState state, LevelReader level, BlockPos pos ) {
+    private static boolean canBeGrass( BlockState state, LevelReader level, BlockPos pos ) {
         BlockPos blockpos = pos.above();
         BlockState blockAboveState = level.getBlockState(blockpos);
         if (blockAboveState.getFluidState().getAmount() == 8) {
@@ -38,14 +40,21 @@ public class AlgalEndStoneSlab extends CustomSlab implements IDuelSlab {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void randomTick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull RandomSource random) {
         if ( !canBeGrass(state, level, pos ) ) {
-            if ( !level.isAreaLoaded( pos, 1 ) ) {
+            if (!level.hasChunksAt(pos.offset(-1, -1, -1), pos.offset(1, 1, 1))) {
                 return;
             }
 
-            level.setBlockAndUpdate( pos, ( getDuel().getBlock() ).withPropertiesOf( state ) );
+            level.setBlockAndUpdate( pos, ( BOPBaseRegistry.BLACK_SAND_SLAB.get() ).withPropertiesOf( state ) );
+        }
+    }
+
+    @Override
+    public void onLand(@NotNull Level world, @NotNull BlockPos pos, BlockState fallingBlockState, @NotNull BlockState currentStateInPos, @NotNull FallingBlockEntity fallingBlockEntity) {
+        super.onLand( world, pos, fallingBlockState, currentStateInPos, fallingBlockEntity );
+        if ( world.getBlockState( pos.below() ).is( this.getOriginBlock() ) ) {
+            world.setBlockAndUpdate( pos.below(), this.getDuelBlock().defaultBlockState() );
         }
     }
 }

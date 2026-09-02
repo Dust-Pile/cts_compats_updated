@@ -4,7 +4,6 @@ import com.blackgear.vanillabackport.common.level.blocks.SpeleothemBlock;
 import com.blackgear.vanillabackport.common.registries.ModBlocks;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import dev.orderedchaos.projectvibrantjourneys.common.blocks.IcicleBlock;
 import net.countered.terrainslabs.api.IConditionalOffset;
 import net.countered.terrainslabs.api.SlabHelper;
 import net.countered.terrainslabs.api.helperInterface.ISpikeConversion;
@@ -22,12 +21,12 @@ public class MixinSpeleothemBlock implements ISpikeConversion<DripstoneThickness
 
     @Override
     public <L extends BlockGetter> boolean couldBeOntop(L level, BlockPos pos, BlockState state) {
-        return state.getValue( IcicleBlock.TIP_DIRECTION ) == Direction.UP;
+        return state.getValue(SpeleothemBlock.TIP_DIRECTION) == Direction.UP;
     }
 
     @Override
     public <L extends BlockGetter> boolean couldBeOnbottom(L level, BlockPos pos, BlockState state) {
-        return state.getValue( IcicleBlock.TIP_DIRECTION ) == Direction.DOWN;
+        return state.getValue(SpeleothemBlock.TIP_DIRECTION) == Direction.DOWN;
     }
 
     @WrapOperation( method = "isValidSpeleothemPlacement", at = @At( value = "INVOKE",
@@ -37,7 +36,7 @@ public class MixinSpeleothemBlock implements ISpikeConversion<DripstoneThickness
             LevelReader instance, BlockPos offPos, Operation<BlockState> original,
             LevelReader level, BlockPos pos, Direction dir
     ) {
-        BlockState state = ModBlocks.SULFUR_SPIKE.get().defaultBlockState(); //Should not matter...
+        BlockState state = ModBlocks.SULFUR_SPIKE.get().defaultBlockState();
         return SlabHelper.terrain_slabs$convertBlockState( instance, offPos, original, state, level, pos );
     }
 }
