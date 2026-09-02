@@ -6,7 +6,6 @@ import net.dusty_dusty.cts_compats.registry.IRegistry;
 import net.dusty_dusty.cts_compats.registry.Version;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -20,17 +19,21 @@ public final class VanillaBackportVersionRouter extends AbstractVersionRouter {
         super(modId, versionFilter);
     }
 
-    public static final class VersionRoutes {
+    static final class VersionRoutes {
+        static final Supplier<IRegistry> BASE = () -> VanillaBackportBaseRegistry.getInstance();
+        static final Supplier<IRegistry> SULFUR = () -> VanillaBackportSulfurRegistry.getInstance();
         private static final Map<Version.Range, Supplier<IRegistry>> VERSION_MAP = new HashMap<>();
         static {
-            VERSION_MAP.put( Version.Range.acceptCustom( "*", "1.1.7", true, false ), () -> VanillaBackportBaseRegistry.getInstance() );
-            VERSION_MAP.put( Version.Range.acceptLaterThanInclusive( "1.1.7" ), () -> VanillaBackportSulfurRegistry.getInstance() );
+            VERSION_MAP.put( Version.Range.acceptCustom( "*", "1.1.7", true, false ), BASE );
+            VERSION_MAP.put( Version.Range.acceptLaterThanInclusive( "1.1.7" ), SULFUR );
         }
 
-        public static List<Version.Range> matching(Version version) {
-            return VERSION_MAP.keySet().stream()
-                    .filter(route -> route.compareTo(version) == 0)
-                    .toList();
+        static Supplier<IRegistry> select(Version version) {
+            return VERSION_MAP.entrySet().stream()
+                    .filter(route -> route.getKey().compareTo(version) == 0)
+                    .map(Map.Entry::getValue)
+                    .findFirst()
+                    .orElseThrow();
         }
 
         private VersionRoutes() {

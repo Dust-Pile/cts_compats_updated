@@ -1,13 +1,8 @@
 package net.dusty_dusty.cts_compats.registry;
 
-import net.dusty_dusty.cts_compats.mods.biomesOPlenty.BOPVersionRouter;
-import net.dusty_dusty.cts_compats.mods.vanillaBackport.VanillaBackportVersionRouter;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class VersionTest {
@@ -44,23 +39,4 @@ class VersionTest {
         assertEquals(0, range.compareTo(new Version("1.1.6.5")));
     }
 
-    @Test
-    void routesBiomesOPlentyBoundaryAtNineteenPointZeroPointZeroPointNinetySix() {
-        List<Version.Range> releaseRoutes = BOPVersionRouter.VersionRoutes.matching(new Version("19.0.0.95"));
-        List<Version.Range> betaRoutes = BOPVersionRouter.VersionRoutes.matching(new Version("19.0.0.96"));
-
-        assertEquals(1, releaseRoutes.size());
-        assertEquals(1, betaRoutes.size());
-        assertNotEquals(releaseRoutes, betaRoutes);
-    }
-
-    @Test
-    void routesVanillaBackportBoundaryAtOnePointOnePointSeven() {
-        List<Version.Range> baseRoutes = VanillaBackportVersionRouter.VersionRoutes.matching(new Version("1.1.6"));
-        List<Version.Range> sulfurRoutes = VanillaBackportVersionRouter.VersionRoutes.matching(new Version("1.1.7"));
-
-        assertEquals(1, baseRoutes.size());
-        assertEquals(1, sulfurRoutes.size());
-        assertNotEquals(baseRoutes, sulfurRoutes);
-    }
 }

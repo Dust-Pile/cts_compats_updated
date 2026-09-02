@@ -7,7 +7,6 @@ import net.dusty_dusty.cts_compats.registry.IRegistry;
 import net.dusty_dusty.cts_compats.registry.Version;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -24,17 +23,21 @@ public final class BOPVersionRouter extends AbstractVersionRouter {
         super( modid, versionFilter );
     }
 
-    public static final class VersionRoutes {
+    static final class VersionRoutes {
+        static final Supplier<IRegistry> RELEASE = () -> BOPReleaseRegistry.getInstance();
+        static final Supplier<IRegistry> BETA = () -> BOPBetaRegistry.getInstance();
         private static final Map<Version.Range, Supplier<IRegistry>> VERSION_MAP = new HashMap<>();
         static {
-            VERSION_MAP.put( Version.Range.acceptCustom( "18.0.0.592", "19.0.0.96", true, false ), () -> BOPReleaseRegistry.getInstance() );
-            VERSION_MAP.put( Version.Range.acceptLaterThanInclusive( "19.0.0.96" ), () -> BOPBetaRegistry.getInstance() );
+            VERSION_MAP.put( Version.Range.acceptCustom( "18.0.0.592", "19.0.0.96", true, false ), RELEASE );
+            VERSION_MAP.put( Version.Range.acceptLaterThanInclusive( "19.0.0.96" ), BETA );
         }
 
-        public static List<Version.Range> matching(Version version) {
-            return VERSION_MAP.keySet().stream()
-                    .filter(route -> route.compareTo(version) == 0)
-                    .toList();
+        static Supplier<IRegistry> select(Version version) {
+            return VERSION_MAP.entrySet().stream()
+                    .filter(route -> route.getKey().compareTo(version) == 0)
+                    .map(Map.Entry::getValue)
+                    .findFirst()
+                    .orElseThrow();
         }
 
         private VersionRoutes() {
