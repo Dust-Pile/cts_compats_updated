@@ -1,0 +1,169 @@
+import org.gradle.api.artifacts.transform.CacheableTransform
+import org.gradle.api.artifacts.transform.InputArtifact
+import org.gradle.api.artifacts.transform.TransformAction
+import org.gradle.api.artifacts.transform.TransformOutputs
+import org.gradle.api.artifacts.transform.TransformParameters
+import org.gradle.api.artifacts.type.ArtifactTypeDefinition
+import org.gradle.api.file.FileSystemLocation
+import org.gradle.api.provider.Provider
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
+import groovy.json.JsonSlurper
+
+plugins {
+    id "com.gradleup.shadow" version "9.3.1"
+}
+
+@CacheableTransform
+abstract class ExtractFabricNestedJars implements TransformAction<TransformParameters.None> {
+    @PathSensitive(PathSensitivity.NAME_ONLY)
+    @InputArtifact
+    abstract Provider<FileSystemLocation> getInputArtifact()
+
+    @Override
+    void transform(TransformOutputs outputs) {
+        new java.util.zip.ZipFile(inputArtifact.get().asFile).withCloseable { modJar ->
+            def metadataEntry = modJar.getEntry("fabric.mod.json")
+            if (metadataEntry == null) {
+                throw new GradleException("Fabric mod is missing fabric.mod.json")
+            }
+
+            def metadata = modJar.getInputStream(metadataEntry).withCloseable { input ->
+                new JsonSlurper().parse(input)
+            }
+            metadata.jars.each { nestedJar ->
+                def entry = modJar.getEntry(nestedJar.file)
+                if (entry == null) {
+                    throw new GradleException("Fabric mod is missing embedded artifact ${nestedJar.file}")
+                }
+
+                modJar.getInputStream(entry).withCloseable { input ->
+                    outputs.file(entry.name.substring(entry.name.lastIndexOf('/') + 1)).withOutputStream { output ->
+                        output << input
+                    }
+                }
+            }
+        }
+    }
+}
+
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
+base {
+    archivesName = rootProject.mod_id + "-fabric"
+}
+
+configurations {
+    common
+    shadowCommon
+    nestedRuntimeMods
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+}
+
+def terrainSlabsCoordinate = "maven.modrinth:SJu6sklj:HYOSUnpY"
+def vanillaBackportCoordinate = "maven.modrinth:6xwxDTgf:KbcStX3T"
+def nestedRuntimeArtifactType = "fabric-nested-runtime-jars"
+def includeOptionalMods = providers.gradleProperty("fabricOptionalMods").map { it.toBoolean() }.orElse(true)
+
+configurations.nestedRuntimeMods {
+    attributes {
+        attribute(ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIBUTE, nestedRuntimeArtifactType)
+    }
+}
+
+dependencies {
+    registerTransform(ExtractFabricNestedJars) {
+        from.attribute(ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIBUTE, ArtifactTypeDefinition.JAR_TYPE)
+        to.attribute(ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIBUTE, nestedRuntimeArtifactType)
+    }
+
+    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
+    modApi "dev.architectury:architectury-fabric:${rootProject.architectury_version}"
+    modImplementation("net.mehvahdjukaar:moonlight-fabric:${rootProject.moonlight_version}:fabric") { transitive = false }
+    modImplementation terrainSlabsCoordinate
+    nestedRuntimeMods terrainSlabsCoordinate
+    modLocalRuntime files(configurations.nestedRuntimeMods)
+    implementation(include("io.github.llamalad7:mixinextras-fabric:0.5.4"))
+
+    if (includeOptionalMods.get()) {
+        modRuntimeOnly "maven.modrinth:HXF82T3G:eZaag2ca"
+        modRuntimeOnly "maven.modrinth:ra7o6Sl7:phaFB3JP"
+        modRuntimeOnly vanillaBackportCoordinate
+        nestedRuntimeMods vanillaBackportCoordinate
+        modRuntimeOnly "maven.modrinth:s3dmwKy5:bCDl02BW"
+        nestedRuntimeMods "maven.modrinth:s3dmwKy5:bCDl02BW"
+        modRuntimeOnly "maven.modrinth:kkmrDlKT:FZV63yhg"
+        modRuntimeOnly "maven.modrinth:i6fiqm5y:kM9ocKlu"
+        modRuntimeOnly "maven.modrinth:9s6osm5g:2xQdCMyG"
+        nestedRuntimeMods "maven.modrinth:9s6osm5g:2xQdCMyG"
+    }
+
+    testImplementation "org.junit.jupiter:junit-jupiter:5.10.2"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher:1.10.2"
+    testImplementation "org.ow2.asm:asm-tree:9.7.1"
+    testImplementation(project(path: ":common", configuration: "namedElements")) { transitive = false }
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive = false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive = false }
+}
+
+tasks.named("test") {
+    useJUnitPlatform()
+}
+
+def fabricRuntimeJava = javaToolchains.launcherFor {
+    languageVersion = JavaLanguageVersion.of(21)
+}
+
+tasks.withType(JavaExec).configureEach {
+    javaLauncher.set(fabricRuntimeJava)
+}
+
+processResources {
+    def replaceProperties = [
+        mod_id: rootProject.mod_id,
+        mod_name: rootProject.mod_name,
+        mod_license: rootProject.mod_license,
+        mod_version: rootProject.mod_version,
+        mod_authors: rootProject.mod_authors,
+        mod_description: rootProject.mod_description,
+        minecraft_version: rootProject.minecraft_version,
+        architectury_version: rootProject.architectury_version,
+        fabric_loader_version: rootProject.fabric_loader_version,
+        fabric_api_version: rootProject.fabric_api_version,
+        moonlight_version: rootProject.moonlight_version
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching("fabric.mod.json") {
+        expand replaceProperties
+    }
+}
+
+shadowJar {
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = "dev-shadow"
+}
+
+remapJar {
+    inputFile.set shadowJar.archiveFile
+    dependsOn shadowJar
+}
+
+sourcesJar {
+    def commonSources = project(":common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}

@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "net.dusty_dusty.cts_compats.mixins",
+  "plugin": "net.dusty_dusty.cts_compats.CtsCompatsMixinPlugin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "biomesOPlenty.BOPAttachedFaceAssigner",
+    "biomesOPlenty.MixinBlocks",
+    "biomesOPlenty.MixinBlocksBeta",
+    "MeadowAssigner",
+    "vanillaBackport.MixinSpeleothemBlock"
+  ],
+  "minVersion": "0.8"
+}
