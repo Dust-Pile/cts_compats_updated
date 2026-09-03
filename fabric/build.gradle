@@ -116,6 +116,14 @@ tasks.named("test") {
     useJUnitPlatform()
 }
 
+def fabricRuntimeJava = javaToolchains.launcherFor {
+    languageVersion = JavaLanguageVersion.of(21)
+}
+
+tasks.withType(JavaExec).configureEach {
+    javaLauncher.set(fabricRuntimeJava)
+}
+
 processResources {
     def replaceProperties = [
         mod_id: rootProject.mod_id,

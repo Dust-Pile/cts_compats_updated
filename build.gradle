@@ -61,3 +61,9 @@ allprojects {
 tasks.named("build") {
     dependsOn(":common:build", ":forge:build", ":fabric:build")
 }
+
+tasks.register("runClient") {
+    doLast {
+        throw new GradleException("Use :fabric:runClient or :forge:runClient")
+    }
+}
