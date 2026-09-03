@@ -6,6 +6,7 @@ import net.dusty_dusty.cts_compats.mods.MeadowRegistry;
 import net.dusty_dusty.cts_compats.mods.VanillaRegistry;
 import net.dusty_dusty.cts_compats.mods.biomesOPlenty.BOPVersionRouter;
 import net.dusty_dusty.cts_compats.mods.vanillaBackport.VanillaBackportVersionRouter;
+import net.dusty_dusty.cts_compats.resources.SlabServerData;
 import org.slf4j.Logger;
 
 public final class CTSCompats {
@@ -29,6 +30,7 @@ public final class CTSCompats {
         REGISTRY_MANAGER.register(BOP_MODID, BOPVersionRouter::getInstance);
         REGISTRY_MANAGER.register(VB_MODID, VanillaBackportVersionRouter::getInstance);
         REGISTRY_MANAGER.register(MEADOW_MODID, MeadowRegistry::getInstance);
+        SlabServerData.init();
         LifecycleEvent.SETUP.register(REGISTRY_MANAGER::assign);
     }
 }

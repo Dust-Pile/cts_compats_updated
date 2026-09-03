@@ -85,6 +85,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
     modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
     modApi "dev.architectury:architectury-fabric:${rootProject.architectury_version}"
+    modImplementation("net.mehvahdjukaar:moonlight-fabric:${rootProject.moonlight_version}:fabric") { transitive = false }
     modImplementation terrainSlabsCoordinate
     nestedRuntimeMods terrainSlabsCoordinate
     modLocalRuntime files(configurations.nestedRuntimeMods)
@@ -135,7 +136,8 @@ processResources {
         minecraft_version: rootProject.minecraft_version,
         architectury_version: rootProject.architectury_version,
         fabric_loader_version: rootProject.fabric_loader_version,
-        fabric_api_version: rootProject.fabric_api_version
+        fabric_api_version: rootProject.fabric_api_version,
+        moonlight_version: rootProject.moonlight_version
     ]
     inputs.properties replaceProperties
 

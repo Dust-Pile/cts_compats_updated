@@ -3,6 +3,7 @@ package net.dusty_dusty.cts_compats;
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.client.rendering.RenderTypeRegistry;
 import net.dusty_dusty.cts_compats.registry.IColorRegistry;
+import net.dusty_dusty.cts_compats.resources.SlabClientResources;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.RenderType;
@@ -26,6 +27,7 @@ public final class CTSCompatsClient {
     }
 
     public static void init() {
+        SlabClientResources.init();
         RegistryManager.forEachRegistry(registry -> {
             registerRenderTypes(registry.getCutoutBlocks(), registry.getCutoutMippedBlocks());
             registry.clientSetup();

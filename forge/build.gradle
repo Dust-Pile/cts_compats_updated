@@ -29,6 +29,7 @@ configurations {
 dependencies {
     forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
     modImplementation "dev.architectury:architectury-forge:${rootProject.architectury_version}"
+    modImplementation("net.mehvahdjukaar:moonlight-forge:${rootProject.moonlight_version}:forge") { transitive = false }
     modImplementation "maven.modrinth:SJu6sklj:fhdOSK5I"
     modRuntimeOnly "maven.modrinth:codAaoxh:EVVb5nP3"
     compileOnly "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
@@ -61,6 +62,7 @@ processResources {
         minecraft_version: rootProject.minecraft_version,
         minecraft_version_range: rootProject.minecraft_version_range,
         architectury_version: rootProject.architectury_version,
+        moonlight_version: rootProject.moonlight_version,
         forge_version: rootProject.forge_version,
         forge_version_range: rootProject.forge_version_range,
         loader_version_range: rootProject.loader_version_range,

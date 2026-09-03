@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "biomesoplenty:block/dried_salt",
-    "side": "biomesoplenty:block/dried_salt",
-    "top": "biomesoplenty:block/dried_salt"
-  }
-}
