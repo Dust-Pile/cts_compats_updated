@@ -1,0 +1,34 @@
+architectury {
+    common(rootProject.enabled_platforms.split(","))
+}
+
+base {
+    archivesName = rootProject.mod_id + "-common"
+}
+
+dependencies {
+    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    modApi "dev.architectury:architectury:${rootProject.architectury_version}"
+    modApi("net.mehvahdjukaar:moonlight:${rootProject.moonlight_version}") { transitive = false }
+    modCompileOnly "maven.modrinth:SJu6sklj:HYOSUnpY"
+    modCompileOnly "maven.modrinth:HXF82T3G:eZaag2ca"
+    modCompileOnly "maven.modrinth:ra7o6Sl7:phaFB3JP"
+    modCompileOnly "maven.modrinth:6xwxDTgf:KbcStX3T"
+
+    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.4"))
+
+    testImplementation "org.junit.jupiter:junit-jupiter:5.10.2"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher:1.10.2"
+}
+
+tasks.named("test") {
+    useJUnitPlatform()
+}
+
+processResources {
+    inputs.property "mod_id", rootProject.mod_id
+
+    filesMatching("pack.mcmeta") {
+        expand "mod_id": rootProject.mod_id
+    }
+}
