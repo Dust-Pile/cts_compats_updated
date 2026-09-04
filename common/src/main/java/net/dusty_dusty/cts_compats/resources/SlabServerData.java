@@ -3,6 +3,7 @@ package net.dusty_dusty.cts_compats.resources;
 import net.countered.terrainslabs.block.interfaces.ISlabCopy;
 import net.dusty_dusty.cts_compats.CTSCompats;
 import net.dusty_dusty.cts_compats.RegistryManager;
+import net.mehvahdjukaar.moonlight.api.resources.ResType;
 import net.mehvahdjukaar.moonlight.api.resources.SimpleTagBuilder;
 import net.mehvahdjukaar.moonlight.api.resources.pack.DynServerResourcesGenerator;
 import net.mehvahdjukaar.moonlight.api.resources.pack.DynamicDataPack;
@@ -43,7 +44,21 @@ public final class SlabServerData extends DynServerResourcesGenerator {
 
     @Override
     public void regenerateDynamicAssets(Consumer<ResourceGenTask> executor) {
+        executor.accept(SlabServerData::generateLootTables);
         executor.accept(SlabServerData::generateTags);
+    }
+
+    private static void generateLootTables(ResourceManager manager, ResourceSink sink) {
+        for (Block block : RegistryManager.getAllBlocks()) {
+            ResourceLocation slabId = BuiltInRegistries.BLOCK.getKey(block);
+            if (sink.alreadyHasAssetAtLocation(manager, slabId, ResType.BLOCK_LOOT_TABLES)) {
+                continue;
+            }
+
+            ISlabCopy slab = (ISlabCopy) block;
+            Block source = SlabLootTable.lootSource(slab);
+            sink.addJson(slabId, SlabLootTable.create(slabId, source.getLootTable()), ResType.BLOCK_LOOT_TABLES);
+        }
     }
 
     private static void generateTags(ResourceManager manager, ResourceSink sink) {
