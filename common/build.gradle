@@ -11,6 +11,7 @@ dependencies {
     modApi "dev.architectury:architectury:${rootProject.architectury_version}"
     modApi("net.mehvahdjukaar:moonlight:${rootProject.moonlight_version}") { transitive = false }
     modCompileOnly "maven.modrinth:SJu6sklj:HYOSUnpY"
+    modRuntimeOnly "maven.modrinth:SJu6sklj:HYOSUnpY"
     modCompileOnly "maven.modrinth:HXF82T3G:eZaag2ca"
     modCompileOnly "maven.modrinth:ra7o6Sl7:phaFB3JP"
     modCompileOnly "maven.modrinth:6xwxDTgf:KbcStX3T"
