@@ -10,6 +10,8 @@ import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import groovy.json.JsonSlurper
 
+import java.util.zip.ZipFile
+
 plugins {
     id "com.gradleup.shadow" version "9.3.1"
 }
@@ -22,7 +24,7 @@ abstract class ExtractFabricNestedJars implements TransformAction<TransformParam
 
     @Override
     void transform(TransformOutputs outputs) {
-        new java.util.zip.ZipFile(inputArtifact.get().asFile).withCloseable { modJar ->
+        new ZipFile(inputArtifact.get().asFile).withCloseable { modJar ->
             def metadataEntry = modJar.getEntry("fabric.mod.json")
             if (metadataEntry == null) {
                 throw new GradleException("Fabric mod is missing fabric.mod.json")
