@@ -10,11 +10,13 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
     modApi "dev.architectury:architectury:${rootProject.architectury_version}"
     modApi("net.mehvahdjukaar:moonlight:${rootProject.moonlight_version}") { transitive = false }
-    modCompileOnly "maven.modrinth:SJu6sklj:HYOSUnpY"
-    modRuntimeOnly "maven.modrinth:SJu6sklj:HYOSUnpY"
+    modCompileOnly "curse.maven:countereds-terrain-slabs-1125437:8825307"
+
+    // Compats
     modCompileOnly "maven.modrinth:HXF82T3G:eZaag2ca"
     modCompileOnly "maven.modrinth:ra7o6Sl7:phaFB3JP"
     modCompileOnly "maven.modrinth:6xwxDTgf:KbcStX3T"
+    modCompileOnly "curse.maven:immersive-weathering-forge-592449:6116941"
 
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.4"))
 
