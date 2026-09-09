@@ -1,82 +1,216 @@
 package net.dusty_dusty.cts_compats.resources;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mojang.logging.LogUtils;
+import net.dusty_dusty.cts_compats.registry.AbstractOptionRegistry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.world.level.block.Block;
+import org.slf4j.Logger;
 
+import java.util.*;
+import java.util.regex.Pattern;
+
+import static net.dusty_dusty.cts_compats.resources.AssetUtils.ModelData;
+import static net.dusty_dusty.cts_compats.resources.ResourceOptions.BlockModelOption;
+
+// TODO: Better tintindex handling
 final class SlabAssetJson {
-    private static final String SLAB_PARENT = "minecraft:block/slab";
-    private static final String SLAB_TOP_PARENT = "minecraft:block/slab_top";
+    private static final Logger LOGGER = LogUtils.getLogger();
 
-    private SlabAssetJson() {
-    }
+    final Block slabBlock;
+    final JsonObject originBlockStates;
+    final Map<String, ModelData> variants;
+    final ResourceLocation slabId;
+    final ResourceLocation originId;
+    final Map<String, AssetUtils.TextureSet> textures;
+    final Map<String, String> nameScheme;
+    final Set<BlockModelOption> options;
 
-    static SlabAssets create(JsonObject originModel, ResourceLocation slabId, ResourceLocation originId) {
-        TextureSet textures = textures(originModel);
-        return new SlabAssets(
-                blockState(slabId, originId),
-                model(SLAB_PARENT, textures.side(), textures.bottom(), textures.top()),
-                model(SLAB_TOP_PARENT, textures.side(), textures.bottom(), textures.top()),
-                itemModel(slabId)
-        );
-    }
+    private Map<ResourceLocation, JsonObject> models = new HashMap<>();
 
-    private static TextureSet textures(JsonObject originModel) {
-        JsonObject textures = originModel.getAsJsonObject("textures");
-        if (originModel.get("parent").getAsString().contains("cube_all")) {
-            String all = textures.get("all").getAsString();
-            return new TextureSet(all, all, all);
+    SlabAssetJson (Block slabBlock, ResourceManager manager, JsonObject originBlockStates, Map<String, ModelData> variants,
+                   ResourceLocation slabId, ResourceLocation originId
+    ) {
+        this.slabBlock = slabBlock;
+        this.originBlockStates = originBlockStates;
+        this.variants = variants;
+        this.slabId = slabId;
+        this.originId = originId;
+        textures = getAllTextures(manager);
+        nameScheme = getNameScheme();
+        options = AbstractOptionRegistry.getGlobalOptions().getOptions(BlockModelOption.class, slabBlock);
+
+        StringBuilder bldr = new StringBuilder();
+        bldr.append(slabId.getPath());
+        bldr.append(" ");
+        for (Map.Entry<String, String> schemeEntry : nameScheme.entrySet()) {
+            bldr.append(", ");
+            bldr.append(schemeEntry.getKey());
+            bldr.append(": ");
+            bldr.append(schemeEntry.getValue());
         }
-        return new TextureSet(
-                textures.get("side").getAsString(),
-                textures.get("bottom").getAsString(),
-                textures.get("top").getAsString()
-        );
+        LOGGER.info(bldr.toString());
     }
 
-    private static JsonObject blockState(ResourceLocation slabId, ResourceLocation originId) {
-        JsonObject variants = new JsonObject();
-        variants.add("type=bottom", variant(blockModel(slabId)));
-        variants.add("type=double", variant(blockModel(originId)));
-        variants.add("type=top", variant(blockModel(topId(slabId))));
+    SlabAssets create() {
+        return new SlabAssets(blockState(), models, itemModel());
+    }
+
+    private JsonObject blockState() {
+        JsonObject slabVariants = new JsonObject();
+        for(Map.Entry<String, ModelData> variant : variants.entrySet()) {
+            String variantLabel = variant.getKey();
+            ResourceLocation bottomName = applyNameScheme(variantLabel);
+            ResourceLocation topName = AssetUtils.topId(bottomName);
+
+            models.putAll(generateModels(textures.get(variantLabel), bottomName, topName));
+
+            slabVariants.add("type=bottom," + variantLabel, AssetUtils.variant(AssetUtils.blockModel(bottomName)));
+            slabVariants.add("type=double," + variantLabel, AssetUtils.variant(AssetUtils.blockModel(variant.getValue().modelId())));
+            slabVariants.add("type=top," + variantLabel, AssetUtils.variant(AssetUtils.blockModel(topName)));
+        }
+
         JsonObject root = new JsonObject();
-        root.add("variants", variants);
+        root.add("variants", slabVariants);
         return root;
     }
 
-    private static JsonObject variant(String model) {
-        JsonObject variant = new JsonObject();
-        variant.addProperty("model", model);
-        return variant;
+    private Map<ResourceLocation, JsonObject> generateModels(AssetUtils.TextureSet textureSet,
+                                                             ResourceLocation bottomName, ResourceLocation topName
+    ) {
+        if (textureSet.isSimple()) {
+            return Map.ofEntries( Map.entry(bottomName, simpleModel(AssetUtils.SLAB_PARENT, textureSet)),
+                    Map.entry(topName, simpleModel(AssetUtils.SLAB_TOP_PARENT, textureSet)) );
+        }
+
+        JsonArray bottomElements = new JsonArray();
+        bottomElements.add(getSlabElement(false));
+
+        JsonArray topElements = new JsonArray();
+        topElements.add(getSlabElement(true));
+
+        if (textureSet.sideOverlay() != null) {
+            bottomElements.add(getOverlayElement(false));
+            topElements.add(getOverlayElement(true));
+        }
+
+        JsonObject model = new JsonObject();
+        model.addProperty("parent", AssetUtils.BLOCK_PARENT);
+        model.add("textures", getTexturesObject(textureSet));
+
+        JsonObject topModel = model.deepCopy();
+        topModel.add("elements", topElements);
+        model.add("elements", bottomElements);
+
+        return Map.ofEntries( Map.entry(bottomName, model),
+                Map.entry(topName, topModel) );
     }
 
-    private static JsonObject model(String parent, String side, String bottom, String top) {
-        JsonObject textures = new JsonObject();
-        textures.addProperty("bottom", bottom);
-        textures.addProperty("side", side);
-        textures.addProperty("top", top);
+    private static JsonObject simpleModel(String parent, AssetUtils.TextureSet textureSet) {
         JsonObject model = new JsonObject();
         model.addProperty("parent", parent);
-        model.add("textures", textures);
+        model.add("textures", getTexturesObject(textureSet));
         return model;
     }
 
-    private static JsonObject itemModel(ResourceLocation slabId) {
+    private static JsonObject getTexturesObject(AssetUtils.TextureSet textureSet) {
+        JsonObject textures = new JsonObject();
+        textures.addProperty("particle", textureSet.particle());
+        textures.addProperty("bottom", textureSet.bottom());
+        textures.addProperty("side", textureSet.side());
+        textures.addProperty("top", textureSet.top());
+        if (textureSet.sideOverlay() != null) {
+            textures.addProperty("overlay", textureSet.sideOverlay());
+        }
+        return textures;
+    }
+
+    private JsonObject itemModel() {
         JsonObject model = new JsonObject();
-        model.addProperty("parent", blockModel(slabId));
+        model.addProperty("parent", AssetUtils.blockModel(slabId));
         return model;
     }
 
-    private static String blockModel(ResourceLocation id) {
-        return id.getNamespace() + ":block/" + id.getPath();
+    private Map<String, AssetUtils.TextureSet> getAllTextures(ResourceManager manager) {
+        Map<String, AssetUtils.TextureSet> textures = new HashMap<>();
+        for (Map.Entry<String, ModelData> variant : variants.entrySet()) {
+            textures.put(variant.getKey(), AssetUtils.getTextures(variant.getValue(), manager));
+        }
+        return textures;
     }
 
-    private static ResourceLocation topId(ResourceLocation id) {
-        return new ResourceLocation(id.getNamespace(), id.getPath() + "_top");
+    private ResourceLocation applyNameScheme(String variantLabel) {
+        return ResourceLocation.tryBuild(slabId.getNamespace(), nameScheme.get(variantLabel).replace("*", slabId.getPath()));
     }
 
-    record SlabAssets(JsonObject blockState, JsonObject bottomModel, JsonObject topModel, JsonObject itemModel) {
+    // Deterministic naming engine for variants.
+    private Map<String, String> getNameScheme() {
+        if ( variants.size() == 1 ) {
+            return Map.of("", "*");
+        }
+        Map<String, String> scheme = new HashMap<>();
+        for (Map.Entry<String, ModelData> variant : variants.entrySet()) {
+            Pattern containsName = Pattern.compile(Pattern.quote(originId.getPath()));
+            if (containsName.asPredicate().test(variant.getValue().modelId().getPath())) {
+                scheme.put( variant.getKey(),
+                        variant.getValue().modelId().getPath().replace(originId.getPath(), "*"));
+                continue;
+            }
+
+            StringBuilder schemeString = new StringBuilder("*");
+            for (String property : variant.getValue().modelId().getPath().split(",")) {
+                String[] parts = property.split("=");
+                if (parts[1].equals("true")) {
+                    schemeString.append("_").append(parts[0].toLowerCase());
+                } else if (parts[1].equals("false")) {
+                } else {
+                    schemeString.append("_").append(parts[1].toLowerCase());
+                }
+            }
+            scheme.put(variant.getKey(), schemeString.toString());
+        }
+
+        return scheme;
     }
 
-    private record TextureSet(String side, String bottom, String top) {
+    private JsonObject getSlabElement(boolean isTop) {
+        JsonObject slabElement = AssetUtils.getSlabCuboid(isTop);
+        JsonArray verticalUV = getFaceUV("top", isTop);
+        JsonObject faces = AssetUtils.addFaces(new JsonObject(), Set.of("up"), verticalUV, "#top",
+                options.contains(BlockModelOption.TINT_INDEX_TOP) ? 0 : -1);
+        AssetUtils.addFaces(faces, Set.of("down"), verticalUV, "#bottom");
+        AssetUtils.addFaces(faces, Set.of("north", "south", "east", "west"), getFaceUV("side", isTop), "#side");
+
+        slabElement.add("faces", faces);
+        return slabElement;
     }
+
+    private JsonObject getOverlayElement(boolean isTop) {
+        JsonObject overlayElement = AssetUtils.getSlabCuboid(isTop);
+        JsonObject faces = AssetUtils.addFaces(new JsonObject(), Set.of("north", "south", "east", "west"),
+                getFaceUV("overlay", isTop), "#overlay",
+                options.contains(BlockModelOption.TINT_INDEX_OVERLAY) ? 0 : -1);
+
+        overlayElement.add("faces", faces);
+        return overlayElement;
+    }
+
+    private JsonArray getFaceUV(String type, boolean isTop) {
+        if (type.equals("top") || type.equals("bottom")) {
+            return AssetUtils.fillArray(new JsonArray(), 0, 0, 16, 16);
+        }
+        boolean offset = type.equals("side") ? options.contains(BlockModelOption.UV_OFF_BY_ONE)
+                : options.contains(BlockModelOption.UV_OFF_BY_ONE_OVERLAY);
+        boolean topEdge = type.equals("side") ? options.contains(BlockModelOption.UV_TOP_EDGE)
+                : options.contains(BlockModelOption.UV_TOP_EDGE_OVERLAY);
+        if (topEdge || isTop) {
+            return AssetUtils.fillArray(new JsonArray(), 0, offset ? 1 : 0, 16, offset ? 9 : 8);
+        } else {
+            return AssetUtils.fillArray(new JsonArray(), 0, offset ? 7 : 8, 16, offset ? 15 : 16);
+        }
+    }
+
+    record SlabAssets(JsonObject blockState, Map<ResourceLocation, JsonObject> models, JsonObject itemModel) {}
 }

@@ -1,5 +1,6 @@
 package net.dusty_dusty.cts_compats.resources;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.countered.terrainslabs.block.interfaces.ISlabCopy;
@@ -21,6 +22,8 @@ import net.minecraft.world.level.block.Block;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 @Environment(EnvType.CLIENT)
@@ -64,14 +67,15 @@ public final class SlabClientResources extends DynClientResourcesGenerator {
         if (hasAllResources(manager, sink, slabId)) {
             return;
         }
-        SlabAssetJson.SlabAssets assets = SlabAssetJson.create(originModel(manager, originId), slabId, originId);
+        JsonObject originStates = originBlockStates(manager, originId);
+        SlabAssetJson.SlabAssets assets = new SlabAssetJson(block, manager, originStates, originModels(manager, originStates), slabId, originId).create();
         addMissingResources(manager, sink, slabId, assets);
     }
 
     private static boolean hasAllResources(ResourceManager manager, ResourceSink sink, ResourceLocation slabId) {
         return sink.alreadyHasAssetAtLocation(manager, slabId, ResType.BLOCKSTATES)
                 && sink.alreadyHasAssetAtLocation(manager, slabId, ResType.BLOCK_MODELS)
-                && sink.alreadyHasAssetAtLocation(manager, topId(slabId), ResType.BLOCK_MODELS)
+                && sink.alreadyHasAssetAtLocation(manager, AssetUtils.topId(slabId), ResType.BLOCK_MODELS)
                 && sink.alreadyHasAssetAtLocation(manager, slabId, ResType.ITEM_MODELS);
     }
 
@@ -84,22 +88,41 @@ public final class SlabClientResources extends DynClientResourcesGenerator {
         if (!sink.alreadyHasAssetAtLocation(manager, slabId, ResType.BLOCKSTATES)) {
             sink.addBlockState(slabId, assets.blockState());
         }
-        if (!sink.alreadyHasAssetAtLocation(manager, slabId, ResType.BLOCK_MODELS)) {
-            sink.addBlockModel(slabId, assets.bottomModel());
-        }
-        if (!sink.alreadyHasAssetAtLocation(manager, topId(slabId), ResType.BLOCK_MODELS)) {
-            sink.addBlockModel(topId(slabId), assets.topModel());
+        for (Map.Entry<ResourceLocation, JsonObject> model : assets.models().entrySet()) {
+            if (!sink.alreadyHasAssetAtLocation(manager, model.getKey(), ResType.BLOCK_MODELS)) {
+                sink.addBlockModel(model.getKey(), model.getValue());
+            }
         }
         if (!sink.alreadyHasAssetAtLocation(manager, slabId, ResType.ITEM_MODELS)) {
             sink.addItemModel(slabId, assets.itemModel());
         }
     }
 
-    private static JsonObject originModel(ResourceManager manager, ResourceLocation originId) {
-        return StaticResource.getOrThrow(manager, ResType.BLOCK_MODELS.getPath(originId)).toJson();
+    private static JsonObject originBlockStates(ResourceManager manager, ResourceLocation originId) {
+        return StaticResource.getOrThrow(manager, ResType.BLOCKSTATES.getPath(originId)).toJson();
     }
 
-    private static ResourceLocation topId(ResourceLocation id) {
-        return new ResourceLocation(id.getNamespace(), id.getPath() + "_top");
+    private static Map<String, AssetUtils.ModelData> originModels(ResourceManager manager, JsonObject blockStates) {
+        if (!blockStates.has("variants")) {
+            throw new UnsupportedOperationException("Cannot decode multipart to models for slabs.");
+        }
+
+        Map<String, AssetUtils.ModelData> originModels = new HashMap<>();
+        for (Map.Entry<String, JsonElement> variant : blockStates.get("variants").getAsJsonObject().asMap().entrySet()) {
+            String model;
+            if (variant.getValue().isJsonArray()) {
+                model = variant.getValue().getAsJsonArray().get(0)
+                        .getAsJsonObject().get("model").getAsString();
+            } else {
+                model = variant.getValue().getAsJsonObject().get("model").getAsString();
+            }
+
+            if (!originModels.containsKey(model)) {
+
+                originModels.put(variant.getKey(), AssetUtils.modelDataFromString(manager, model));
+            }
+        }
+
+        return originModels;
     }
 }
