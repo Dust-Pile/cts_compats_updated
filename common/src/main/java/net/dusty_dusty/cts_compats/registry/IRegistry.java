@@ -24,6 +24,10 @@ public interface IRegistry {
 
     Optional<Supplier<IColorRegistry>> getColorRegistry();
 
+    default Optional<Supplier<IResourceOptionRegistry>> getResourceOptions() {
+        return Optional.empty();
+    }
+
     default void clientSetup() {
     }
 
