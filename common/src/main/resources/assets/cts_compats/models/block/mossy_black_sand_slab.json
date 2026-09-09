@@ -8,7 +8,8 @@
     "overlay": "biomesoplenty:block/mossy_black_sand_side"
   },
   "elements": [
-    {   "from": [ 0, 0, 0 ],
+    {
+      "from": [ 0, 0, 0 ],
       "to": [ 16, 8, 16 ],
       "faces": {
         "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#bottom", "cullface": "down" },
@@ -19,7 +20,8 @@
         "east":  { "uv": [ 0, 1, 16, 9 ], "texture": "#side",   "cullface": "east" }
       }
     },
-    {   "from": [ 0, 0, 0 ],
+    {
+      "from": [ 0, 0, 0 ],
       "to": [ 16, 8, 16 ],
       "faces": {
         "north": { "uv": [ 0, 1, 16, 9 ], "texture": "#overlay", "tintindex": 0, "cullface": "north" },

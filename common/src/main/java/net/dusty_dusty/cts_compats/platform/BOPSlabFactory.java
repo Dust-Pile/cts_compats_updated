@@ -4,9 +4,6 @@ import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.world.level.block.Block;
 
 public final class BOPSlabFactory {
-    private BOPSlabFactory() {
-    }
-
     @ExpectPlatform
     public static Block sand(Block originalBlock) {
         throw new AssertionError();

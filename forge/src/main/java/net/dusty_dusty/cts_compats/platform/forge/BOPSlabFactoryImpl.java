@@ -1,8 +1,8 @@
 package net.dusty_dusty.cts_compats.platform.forge;
 
+import net.countered.terrainslabs.block.customslabs.specialslabs.GravityAffectedSlab;
 import net.dusty_dusty.cts_compats.mods.biomesOPlenty.block.DriedSaltSlab;
 import net.dusty_dusty.cts_compats.mods.biomesOPlenty.block.MossyBlackSandSlab;
-import net.dusty_dusty.cts_compats.mods.biomesOPlenty.block.SandSlabBlockBOP;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.FluidTags;
@@ -16,9 +16,6 @@ import net.minecraftforge.common.PlantType;
 import org.jetbrains.annotations.NotNull;
 
 public final class BOPSlabFactoryImpl {
-    private BOPSlabFactoryImpl() {
-    }
-
     public static Block sand(Block originalBlock) {
         return new ForgeSandSlab(originalBlock);
     }
@@ -31,7 +28,7 @@ public final class BOPSlabFactoryImpl {
         return new ForgeDriedSaltSlab(originalBlock);
     }
 
-    private static final class ForgeSandSlab extends SandSlabBlockBOP {
+    private static final class ForgeSandSlab extends GravityAffectedSlab {
         private ForgeSandSlab(Block originalBlock) {
             super(originalBlock);
         }
