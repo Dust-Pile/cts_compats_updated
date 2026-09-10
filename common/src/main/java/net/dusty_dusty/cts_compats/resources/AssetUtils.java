@@ -87,6 +87,10 @@ public final class AssetUtils {
     static TextureSet getTextures(ModelData modelData, ResourceManager manager) {
         JsonObject model = modelData.model();
         JsonObject textures = model.getAsJsonObject("textures");
+        if (textures == null) {
+            return null;
+        }
+
         String parent = model.get("parent") != null ? model.get("parent").getAsString() : null;
 
         if (parent != null && parent.contains("cube_all")) {
@@ -101,27 +105,21 @@ public final class AssetUtils {
         String overlay = textures.get("overlay") != null ? textures.get("overlay").getAsString()
                 : textures.get("side_overlay") != null ? textures.get("side_overlay").getAsString() : null;
 
-        if ((side == null || bottom == null || top == null) // Don't dive for overlay or particle exclusively.
+        // Dive deep recursive to get all textures
+        if ((particle == null || side == null || bottom == null || top == null || overlay == null)
                 && parent != null && !parent.contains("block/block")
         ) {
             TextureSet parentSet = getTextures(modelDataFromString(manager, parent), manager);
-            particle = particle == null ? parentSet.particle : particle;
-            side = side == null ? parentSet.side : side;
-            bottom = bottom == null ? parentSet.bottom : bottom;
-            top = top == null ? parentSet.top : top;
-            overlay = overlay == null ? parentSet.sideOverlay : overlay;
+            if (parentSet != null) {
+                particle = particle == null ? parentSet.particle : particle;
+                side = side == null ? parentSet.side : side;
+                bottom = bottom == null ? parentSet.bottom : bottom;
+                top = top == null ? parentSet.top : top;
+                overlay = overlay == null ? parentSet.sideOverlay : overlay;
+            }
         }
 
         particle = particle == null ? side : particle;
-
-        return new TextureSet(
-                modelData.modelId(),
-                false,
-                particle,
-                side,
-                bottom,
-                top,
-                overlay
-        );
+        return new TextureSet( modelData.modelId(), false, particle, side, bottom, top, overlay );
     }
 }

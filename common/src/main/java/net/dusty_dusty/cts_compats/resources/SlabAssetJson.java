@@ -24,11 +24,12 @@ final class SlabAssetJson {
     final Map<String, ModelData> variants;
     final ResourceLocation slabId;
     final ResourceLocation originId;
+
     final Map<String, AssetUtils.TextureSet> textures;
     final Map<String, String> nameScheme;
     final Set<BlockModelOption> options;
 
-    private Map<ResourceLocation, JsonObject> models = new HashMap<>();
+    private final Map<ResourceLocation, JsonObject> models = new HashMap<>();
 
     SlabAssetJson (Block slabBlock, ResourceManager manager, JsonObject originBlockStates, Map<String, ModelData> variants,
                    ResourceLocation slabId, ResourceLocation originId
@@ -43,13 +44,11 @@ final class SlabAssetJson {
         options = AbstractOptionRegistry.getGlobalOptions().getOptions(BlockModelOption.class, slabBlock);
 
         StringBuilder bldr = new StringBuilder();
-        bldr.append(slabId.getPath());
-        bldr.append(" ");
-        for (Map.Entry<String, String> schemeEntry : nameScheme.entrySet()) {
+        bldr.append(slabId);
+        bldr.append(":  ");
+        for (BlockModelOption option : options) {
+            bldr.append(option.name());
             bldr.append(", ");
-            bldr.append(schemeEntry.getKey());
-            bldr.append(": ");
-            bldr.append(schemeEntry.getValue());
         }
         LOGGER.info(bldr.toString());
     }
@@ -152,6 +151,7 @@ final class SlabAssetJson {
         }
         Map<String, String> scheme = new HashMap<>();
         for (Map.Entry<String, ModelData> variant : variants.entrySet()) {
+            // When possible, just slot in where the id is.
             Pattern containsName = Pattern.compile(Pattern.quote(originId.getPath()));
             if (containsName.asPredicate().test(variant.getValue().modelId().getPath())) {
                 scheme.put( variant.getKey(),
@@ -159,6 +159,7 @@ final class SlabAssetJson {
                 continue;
             }
 
+            // Backup labeling system if block id not found
             StringBuilder schemeString = new StringBuilder("*");
             for (String property : variant.getValue().modelId().getPath().split(",")) {
                 String[] parts = property.split("=");
