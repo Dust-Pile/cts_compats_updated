@@ -1,15 +1,16 @@
 package net.dusty_dusty.cts_compats.registry;
 
-import dev.architectury.registry.registries.RegistrySupplier;
+import com.mojang.logging.LogUtils;
 import net.dusty_dusty.cts_compats.resources.ResourceOptions;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.resources.ResourceLocation;
+import org.slf4j.Logger;
 
 import java.util.*;
 
 import static net.dusty_dusty.cts_compats.resources.ResourceOptions.IResourceOption;
 
 public abstract class AbstractOptionRegistry implements IResourceOptionRegistry {
-    private static final Map<Class<?>, Map<Block, Set<IResourceOption>>> GLOBAL_OPTIONS =
+    private static final Map<Class<?>, Map<String, Set<IResourceOption>>> GLOBAL_OPTIONS =
             initializeOptionTypes(new HashMap<>());
 
     public static IResourceOptionRegistry getGlobalOptions() {
@@ -19,40 +20,35 @@ public abstract class AbstractOptionRegistry implements IResourceOptionRegistry 
         };
     }
 
-
-
-    private final Map<Class<?>, Map<RegistrySupplier<Block>, Set<IResourceOption>>> options;
-    private Map<Class<?>, Map<Block, Set<IResourceOption>>> convertedOptions;
+    private final Map<Class<?>, Map<String, Set<IResourceOption>>> options;
 
     public AbstractOptionRegistry() {
         options = new HashMap<>();
         initializeOptionTypes(options);
     }
-    private AbstractOptionRegistry(Map<Class<?>, Map<Block, Set<IResourceOption>>> convertedOptions) {
-        options = null;
-        this.convertedOptions = convertedOptions;
+    private AbstractOptionRegistry(Map<Class<?>, Map<String, Set<IResourceOption>>> options) {
+        this.options = options;
     }
 
     @SuppressWarnings("unchecked")
-    public final <T> Map<Block, Set<T>> getOptionsOfType(Class<T> clazz) {
+    public final <T> Map<String, Set<T>> getOptionsOfType(Class<T> clazz) {
         throwUnsupported(clazz);
-        Map<Block, Set<T>> unprotectedMap = new HashMap<>();
-        for (Map.Entry<Block, Set<IResourceOption>> entry : convertedOptions.get(clazz).entrySet()) {
+        Map<String, Set<T>> unprotectedMap = new HashMap<>();
+        for (Map.Entry<String, Set<IResourceOption>> entry : options.get(clazz).entrySet()) {
             unprotectedMap.put(entry.getKey(), new HashSet<>((Set<T>) entry.getValue()));
         }
         return unprotectedMap;
     }
 
     @SuppressWarnings("unchecked")
-    public final <T> Set<T> getOptions(Class<?> clazz, Block block) {
+    public final <T> Set<T> getOptions(Class<?> clazz, String blockId) {
         throwUnsupported(clazz);
-        Set<T> options = (Set<T>) convertedOptions.get(clazz).get(block);
-        return new HashSet<>(options == null ? Set.of() : options);
+        Set<T> blockOptions = (Set<T>) options.get(clazz).get(blockId);
+        return new HashSet<>(blockOptions == null ? Set.of() : blockOptions);
     }
 
     public final void register() {
         register(new OptionProvider(this));
-        convertOptions();
     }
 
     public abstract void register(OptionProvider provider);
@@ -67,23 +63,21 @@ public abstract class AbstractOptionRegistry implements IResourceOptionRegistry 
         }
 
         @SafeVarargs
-        public final <T extends IResourceOption> OptionProvider addOptions(RegistrySupplier<Block> block, T... options) {
-            owner.addOptions(block, Set.of(options));
+        public final <T extends IResourceOption> OptionProvider addOptions(ResourceLocation block, T... options) {
+            owner.addOptions(block.toString(), Set.of(options));
             return this;
         }
 
-        @SafeVarargs
-        public final <T extends IResourceOption> OptionProvider addBlocksForOption(T option, RegistrySupplier<Block>... blocks) {
-            for (RegistrySupplier<Block> block : blocks) {
-                owner.addOptions(block, Set.of(option));
+        public final <T extends IResourceOption> OptionProvider addBlocksForOption(T option, ResourceLocation... blocks) {
+            for (ResourceLocation block : blocks) {
+                owner.addOptions(block.toString(), Set.of(option));
             }
             return this;
         }
 
-        @SafeVarargs
-        public final <T extends IResourceOption> OptionProvider addBlocksForOptions(Set<T> options, RegistrySupplier<Block>... blocks) {
-            for (RegistrySupplier<Block> block : blocks) {
-                owner.addOptions(block, new HashSet<>(options));
+        public final <T extends IResourceOption> OptionProvider addBlocksForOptions(Set<T> options, ResourceLocation... blocks) {
+            for (ResourceLocation block : blocks) {
+                owner.addOptions(block.toString(), new HashSet<>(options));
             }
             return this;
         }
@@ -99,6 +93,24 @@ public abstract class AbstractOptionRegistry implements IResourceOptionRegistry 
         return options;
     }
 
+    private <T extends IResourceOption> void addOptions(String blockId, Set<T> options) {
+        if (options == null || options.isEmpty()) {
+            return;
+        }
+
+        Class<?> inputType = options.iterator().next().getClass();
+        throwUnsupported(inputType);
+
+        subMapUnion(this.options, inputType, blockId, options);
+        subMapUnion(GLOBAL_OPTIONS, inputType, blockId, options);
+    }
+
+    private void throwUnsupported(Class<?> clazz) {
+        if (!this.options.containsKey(clazz)) {
+            throw new IllegalArgumentException("No Option Registered for type " + clazz.getName());
+        }
+    }
+
     @SuppressWarnings("unchecked")
     private static <K, T, V extends Set<T>> void subMapUnion(Map<Class<?>, Map<K, V>> map, Class<?> clazz, K key, Object value) {
         Map<K, V> specific = map.get(clazz);
@@ -107,36 +119,5 @@ public abstract class AbstractOptionRegistry implements IResourceOptionRegistry 
         } else {
             specific.get(key).addAll((V) value);
         }
-    }
-
-    private <T extends IResourceOption> void addOptions(RegistrySupplier<Block> block, Set<T> options) {
-        Class<?> inputType = options.getClass().arrayType();
-        throwUnsupported(inputType);
-        subMapUnion(this.options, inputType, block, options);
-    }
-
-    private void throwUnsupported(Class<?> clazz) {
-        if (this.options == null ? !this.convertedOptions.containsKey(clazz) : !this.options.containsKey(clazz)) {
-            throw new IllegalArgumentException("No Option Registered for type " + clazz.getName());
-        }
-    }
-
-    private void convertOptions() {
-        if (convertedOptions != null) {
-            return;
-        }
-
-        Map<Class<?>, Map<Block, Set<IResourceOption>>> converted = new HashMap<>();
-        initializeOptionTypes(converted);
-        for (Map.Entry<Class<?>, Map<RegistrySupplier<Block>, Set<IResourceOption>>> optionEntry : options.entrySet()) {
-            for (Map.Entry<RegistrySupplier<Block>, Set<IResourceOption>> entry : optionEntry.getValue().entrySet()) {
-                Block block = entry.getKey().get();
-                converted.get(optionEntry.getKey()).put(block, entry.getValue());
-                subMapUnion(GLOBAL_OPTIONS, optionEntry.getKey(), block, entry.getValue());
-            }
-        }
-
-        options.clear(); // Remove unused data
-        convertedOptions = converted;
     }
 }

@@ -56,6 +56,7 @@ public abstract class AbstractRegistry implements IRegistry {
     public void register() {
         COMPAT_BLOCKS.register();
         COMPAT_ITEMS.register();
+        this.getResourceOptions().ifPresent(options -> options.get().register());
     }
 
     @Override

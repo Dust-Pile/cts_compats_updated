@@ -1,15 +1,19 @@
 package net.dusty_dusty.cts_compats.registry;
 
-import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.world.level.block.Block;
 
 import java.util.Map;
 import java.util.Set;
 
 public interface IResourceOptionRegistry {
-    <T> Map<Block, Set<T>> getOptionsOfType(Class<T> clazz);
+    <T> Map<String, Set<T>> getOptionsOfType(Class<T> clazz);
 
-    <T> Set<T> getOptions(Class<?> clazz, Block block);
+    <T> Set<T> getOptions(Class<?> clazz, String blockId);
 
     void register();
+
+    default <T> Set<T> getOptions(Class<?> clazz, Block block) {
+        String[] components = block.getDescriptionId().split("\\.");
+        return this.getOptions(clazz, components[1] + ":" + components[2]);
+    }
 }

@@ -16,12 +16,14 @@ public class WeatheringOptionRegistry extends AbstractOptionRegistry {
                             BlockModelOption.TINT_INDEX_TOP,
                             BlockModelOption.TINT_INDEX_OVERLAY
                         ),
-        //                WeatheringRegistry.GRASSY_EARTHEN_CLAY_SLAB,
-                        WeatheringRegistry.GRASSY_SANDY_DIRT_SLAB,
-                        WeatheringRegistry.GRASSY_SILT_SLAB,
-                        WeatheringRegistry.GRASSY_PERMAFROST,
-                        WeatheringRegistry.ROOTED_GRASS_SLAB
+        //                WeatheringRegistry.GRASSY_EARTHEN_CLAY_SLAB.getId(),
+                        WeatheringRegistry.GRASSY_PERMAFROST.getId(),
+                        WeatheringRegistry.GRASSY_SANDY_DIRT_SLAB.getId(),
+                        WeatheringRegistry.GRASSY_SILT_SLAB.getId(),
+                        WeatheringRegistry.ROOTED_GRASS_SLAB.getId()
                 )
-                .addOptions(WeatheringRegistry.LOAM_SLAB, BlockModelOption.UV_TOP_EDGE);
+                .addOptions(WeatheringRegistry.LOAM_SLAB.getId(), BlockModelOption.UV_TOP_EDGE)
+                .addOptions(WeatheringRegistry.GRASSY_PERMAFROST.getId(),
+                        BlockModelOption.UV_TOP_EDGE, BlockModelOption.UV_OFF_BY_ONE);
     }
 }
