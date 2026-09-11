@@ -1,9 +1,7 @@
 package net.dusty_dusty.cts_compats.registry;
 
-import com.mojang.logging.LogUtils;
 import net.dusty_dusty.cts_compats.resources.ResourceOptions;
 import net.minecraft.resources.ResourceLocation;
-import org.slf4j.Logger;
 
 import java.util.*;
 
@@ -44,7 +42,7 @@ public abstract class AbstractOptionRegistry implements IResourceOptionRegistry 
     public final <T> Set<T> getOptions(Class<?> clazz, String blockId) {
         throwUnsupported(clazz);
         Set<T> blockOptions = (Set<T>) options.get(clazz).get(blockId);
-        return new HashSet<>(blockOptions == null ? Set.of() : blockOptions);
+        return new HashSet<>(blockOptions == null ? new HashSet<>() : blockOptions);
     }
 
     public final void register() {
@@ -64,13 +62,13 @@ public abstract class AbstractOptionRegistry implements IResourceOptionRegistry 
 
         @SafeVarargs
         public final <T extends IResourceOption> OptionProvider addOptions(ResourceLocation block, T... options) {
-            owner.addOptions(block.toString(), Set.of(options));
+            owner.addOptions(block.toString(), new HashSet<>(Set.of(options)));
             return this;
         }
 
         public final <T extends IResourceOption> OptionProvider addBlocksForOption(T option, ResourceLocation... blocks) {
             for (ResourceLocation block : blocks) {
-                owner.addOptions(block.toString(), Set.of(option));
+                owner.addOptions(block.toString(), new HashSet<>(Set.of(option)));
             }
             return this;
         }
