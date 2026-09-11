@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import java.util.*;
 import java.util.regex.Pattern;
 
+import static net.dusty_dusty.cts_compats.resources.AssetUtils.TextureType;
 import static net.dusty_dusty.cts_compats.resources.AssetUtils.ModelData;
 import static net.dusty_dusty.cts_compats.resources.ResourceOptions.BlockModelOption;
 
@@ -42,15 +43,6 @@ final class SlabAssetJson {
         textures = getAllTextures(manager);
         nameScheme = getNameScheme();
         options = AbstractOptionRegistry.getGlobalOptions().getOptions(BlockModelOption.class, slabBlock);
-
-        StringBuilder bldr = new StringBuilder();
-        bldr.append(slabId);
-        bldr.append(":  ");
-        for (BlockModelOption option : options) {
-            bldr.append(option.name());
-            bldr.append(", ");
-        }
-        LOGGER.info(bldr.toString());
     }
 
     SlabAssets create() {
@@ -77,7 +69,7 @@ final class SlabAssetJson {
     }
 
     private Map<ResourceLocation, JsonObject> generateModels(AssetUtils.TextureSet textureSet,
-                                                             ResourceLocation bottomName, ResourceLocation topName
+            ResourceLocation bottomName, ResourceLocation topName
     ) {
         if (textureSet.isSimple()) {
             return Map.ofEntries( Map.entry(bottomName, simpleModel(AssetUtils.SLAB_PARENT, textureSet)),
@@ -85,14 +77,14 @@ final class SlabAssetJson {
         }
 
         JsonArray bottomElements = new JsonArray();
-        bottomElements.add(getSlabElement(false));
+        bottomElements.add(getSlabElement(textureSet, false));
 
         JsonArray topElements = new JsonArray();
-        topElements.add(getSlabElement(true));
+        topElements.add(getSlabElement(textureSet, true));
 
-        if (textureSet.sideOverlay() != null) {
-            bottomElements.add(getOverlayElement(false));
-            topElements.add(getOverlayElement(true));
+        if (textureSet.hasOverlay()) {
+            bottomElements.add(getOverlayElement(textureSet, false));
+            topElements.add(getOverlayElement(textureSet, true));
         }
 
         JsonObject model = new JsonObject();
@@ -116,12 +108,8 @@ final class SlabAssetJson {
 
     private static JsonObject getTexturesObject(AssetUtils.TextureSet textureSet) {
         JsonObject textures = new JsonObject();
-        textures.addProperty("particle", textureSet.particle());
-        textures.addProperty("bottom", textureSet.bottom());
-        textures.addProperty("side", textureSet.side());
-        textures.addProperty("top", textureSet.top());
-        if (textureSet.sideOverlay() != null) {
-            textures.addProperty("overlay", textureSet.sideOverlay());
+        for (Map.Entry<AssetUtils.TextureType, AssetUtils.CuboidTexture> ident : textureSet.textures().entrySet()) {
+            textures.addProperty(ident.getKey().toString(), ident.getValue().name());
         }
         return textures;
     }
@@ -176,23 +164,44 @@ final class SlabAssetJson {
         return scheme;
     }
 
-    private JsonObject getSlabElement(boolean isTop) {
+    private JsonObject getSlabElement(AssetUtils.TextureSet textureSet, boolean isTop) {
         JsonObject slabElement = AssetUtils.getSlabCuboid(isTop);
         JsonArray verticalUV = getFaceUV("top", isTop);
-        JsonObject faces = AssetUtils.addFaces(new JsonObject(), Set.of("up"), verticalUV, "#top",
-                options.contains(BlockModelOption.TINT_INDEX_TOP) ? 0 : -1);
-        AssetUtils.addFaces(faces, Set.of("down"), verticalUV, "#bottom");
-        AssetUtils.addFaces(faces, Set.of("north", "south", "east", "west"), getFaceUV("side", isTop), "#side");
+
+        JsonObject faces = new JsonObject();
+        AssetUtils.addFaces(faces, Set.of("up"), verticalUV, "#top",
+                textureSet.get(TextureType.TOP).tintIndex());
+        AssetUtils.addFaces(faces, Set.of("down"), verticalUV, "#bottom",
+                textureSet.get(TextureType.BOTTOM).tintIndex());
+        AssetUtils.addFaces(faces, Set.of("north", "south", "east", "west"), getFaceUV("side", isTop), "#side",
+                textureSet.get(TextureType.SIDE).tintIndex());
 
         slabElement.add("faces", faces);
         return slabElement;
     }
 
-    private JsonObject getOverlayElement(boolean isTop) {
+    private JsonObject getOverlayElement(AssetUtils.TextureSet textureSet, boolean isTop) {
         JsonObject overlayElement = AssetUtils.getSlabCuboid(isTop);
-        JsonObject faces = AssetUtils.addFaces(new JsonObject(), Set.of("north", "south", "east", "west"),
-                getFaceUV("overlay", isTop), "#overlay",
-                options.contains(BlockModelOption.TINT_INDEX_OVERLAY) ? 0 : -1);
+        JsonArray verticalUV = getFaceUV("top", isTop);
+        JsonObject faces = new JsonObject();
+        if (textureSet.get(TextureType.TOP_OVERLAY) != null) {
+            AssetUtils.addFaces(faces, Set.of("up"), verticalUV, "#top_overlay",
+                    textureSet.get(TextureType.TOP_OVERLAY).tintIndex());
+        }
+        if (textureSet.get(TextureType.BOTTOM_OVERLAY) != null) {
+            AssetUtils.addFaces(faces, Set.of("down"), verticalUV, "#bottom_overlay",
+                    textureSet.get(TextureType.BOTTOM_OVERLAY).tintIndex());
+        }
+        if (textureSet.get(TextureType.SIDE_OVERLAY) != null) {
+            AssetUtils.addFaces(faces, Set.of("north", "south", "east", "west"),
+                    getFaceUV("side_overlay", isTop), "#side_overlay",
+                    textureSet.get(TextureType.SIDE_OVERLAY).tintIndex());
+
+        } else if (textureSet.get(TextureType.OVERLAY) != null) {
+            AssetUtils.addFaces(faces, Set.of("north", "south", "east", "west"),
+                    getFaceUV("overlay", isTop), "#overlay",
+                    textureSet.get(TextureType.OVERLAY).tintIndex());
+        }
 
         overlayElement.add("faces", faces);
         return overlayElement;

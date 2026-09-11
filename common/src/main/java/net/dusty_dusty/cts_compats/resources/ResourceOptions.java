@@ -14,8 +14,6 @@ public final class ResourceOptions {
         UV_OFF_BY_ONE, // Offset uv by 1 pixel relative to edge
         UV_TOP_EDGE_OVERLAY,
         UV_OFF_BY_ONE_OVERLAY,
-        TINT_INDEX_TOP,
-        TINT_INDEX_OVERLAY,
         STATE_ALL_ROTATIONS
     }
 }

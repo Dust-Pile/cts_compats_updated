@@ -3,27 +3,65 @@ package net.dusty_dusty.cts_compats.resources;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.logging.LogUtils;
 import net.mehvahdjukaar.moonlight.api.resources.ResType;
 import net.mehvahdjukaar.moonlight.api.resources.StaticResource;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
+import org.slf4j.Logger;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 public final class AssetUtils {
     static final String SLAB_PARENT = "minecraft:block/slab";
     static final String SLAB_TOP_PARENT = "minecraft:block/slab_top";
     static final String BLOCK_PARENT = "minecraft:block/block";
+    private static final Logger LOGGER = LogUtils.getLogger();
 
-    record TextureSet(ResourceLocation modelId, Boolean isSimple, String particle, String side, String bottom, String top, String sideOverlay) {}
+    record TextureSet(ResourceLocation modelId, Boolean isSimple, Map<TextureType, CuboidTexture> textures) {
+        CuboidTexture get(TextureType type) {
+            return this.textures().get(type);
+        }
+
+        boolean hasOverlay() {
+            return this.get(TextureType.TOP_OVERLAY) != null || this.get(TextureType.BOTTOM_OVERLAY) != null
+                    || this.get(TextureType.SIDE_OVERLAY) != null || this.get(TextureType.OVERLAY) != null;
+        }
+    }
 
     record ModelData(ResourceLocation modelId, JsonObject model) {}
 
-    static JsonObject addFaces(JsonObject faces, Set<String> directions, JsonArray uv, String texture) {
-        return addFaces(faces, directions, uv, texture, -1);
+    record CuboidTexture(String name, int tintIndex) {}
+
+    enum TextureType {
+        PARTICLE("null"),
+        TOP("up"),
+        BOTTOM("down"),
+        SIDE("north"),
+        TOP_OVERLAY("up"),
+        BOTTOM_OVERLAY("down"),
+        SIDE_OVERLAY("north"),
+        OVERLAY("north");
+
+        private final String dir;
+
+        TextureType(String direction) {
+            dir = direction;
+        }
+
+        @Override
+        public String toString() {
+            return this.name().toLowerCase();
+        }
+
+        public String getDirection() {
+            return dir;
+        }
     }
 
-    static JsonObject addFaces(JsonObject faces, Set<String> directions, JsonArray uv, String texture, int tintIndex) {
+    static void addFaces(JsonObject faces, Set<String> directions, JsonArray uv, String texture, int tintIndex) {
         for (String direction : directions) {
             JsonObject face = new JsonObject();
             face.add("uv", uv);
@@ -34,7 +72,6 @@ public final class AssetUtils {
             }
             faces.add(direction, face);
         }
-        return faces;
     }
 
     static JsonObject getSlabCuboid(boolean isTop) {
@@ -92,34 +129,71 @@ public final class AssetUtils {
         }
 
         String parent = model.get("parent") != null ? model.get("parent").getAsString() : null;
-
-        if (parent != null && parent.contains("cube_all")) {
-            String all = textures.get("all").getAsString();
-            return new TextureSet(modelData.modelId(), true, all, all, all, all, null);
+        if (parent == null) {
+            return null;
         }
 
-        String particle = textures.get("particle") != null ? textures.get("particle").getAsString() : null;
-        String side = textures.get("side") != null ? textures.get("side").getAsString() : null;
-        String bottom = textures.get("bottom") != null ? textures.get("bottom").getAsString() : null;
-        String top = textures.get("top") != null ? textures.get("top").getAsString() : null;
-        String overlay = textures.get("overlay") != null ? textures.get("overlay").getAsString()
-                : textures.get("side_overlay") != null ? textures.get("side_overlay").getAsString() : null;
+        if (parent.contains("cube_all")) {
+            String all = textures.get("all").getAsString();
+            return new TextureSet(modelData.modelId(), true, Map.ofEntries(
+                    Map.entry(TextureType.PARTICLE, new CuboidTexture(all, -1)),
+                    Map.entry(TextureType.TOP, new CuboidTexture(all, -1)),
+                    Map.entry(TextureType.BOTTOM, new CuboidTexture(all, -1)),
+                    Map.entry(TextureType.SIDE, new CuboidTexture(all, -1))
+            ));
+        }
+
+        Map<TextureType, CuboidTexture> map = addNewTextures( new HashMap<>(), modelData);
 
         // Dive deep recursive to get all textures
-        if ((particle == null || side == null || bottom == null || top == null || overlay == null)
-                && parent != null && !parent.contains("block/block")
-        ) {
+        if (!parent.contains("block/block")) {
             TextureSet parentSet = getTextures(modelDataFromString(manager, parent), manager);
             if (parentSet != null) {
-                particle = particle == null ? parentSet.particle : particle;
-                side = side == null ? parentSet.side : side;
-                bottom = bottom == null ? parentSet.bottom : bottom;
-                top = top == null ? parentSet.top : top;
-                overlay = overlay == null ? parentSet.sideOverlay : overlay;
+                for (Map.Entry<TextureType, CuboidTexture> texture : parentSet.textures().entrySet()) {
+                    map.merge(texture.getKey(), texture.getValue(), (oldValue, value) -> {
+                        if (oldValue.tintIndex < 0 && value.tintIndex >= 0) {
+                            return new CuboidTexture(oldValue.name, value.tintIndex);
+                        }
+                        return oldValue;
+                    });
+                }
             }
         }
 
-        particle = particle == null ? side : particle;
-        return new TextureSet( modelData.modelId(), false, particle, side, bottom, top, overlay );
+        if (!map.containsKey(TextureType.PARTICLE)) map.put(TextureType.PARTICLE, map.get(TextureType.SIDE));
+        return new TextureSet( modelData.modelId(), false, map );
+    }
+
+    private static Map<TextureType, CuboidTexture> addNewTextures(Map<TextureType, CuboidTexture> map, ModelData modelData) {
+        JsonObject textures = modelData.model().getAsJsonObject("textures");
+        for (Map.Entry<String, JsonElement> texture: textures.asMap().entrySet()) {
+            try {
+                TextureType type = TextureType.valueOf(texture.getKey().toUpperCase());
+                map.putIfAbsent(type, new CuboidTexture(texture.getValue().getAsString(), getTintIndex(modelData, type)));
+            } catch (IllegalArgumentException ignored) {}
+        }
+
+        return map;
+    }
+
+    private static int getTintIndex(ModelData modelData, TextureType type) {
+        JsonObject model = modelData.model();
+        JsonArray elements = model.getAsJsonArray("elements");
+        if (elements == null) {
+            return -1;
+        }
+        for (JsonElement element : elements) {
+            for (JsonElement face : element.getAsJsonObject().get("faces").getAsJsonObject().asMap().values()) {
+                if (face == null) continue;
+                JsonElement texture = face.getAsJsonObject().get("texture");
+                if (texture != null && texture.getAsString().equals("#" + type.toString())
+                        && face.getAsJsonObject().has("tintindex")
+                ) {
+                    return face.getAsJsonObject().get("tintindex").getAsInt();
+                }
+            }
+        }
+
+        return -1;
     }
 }
