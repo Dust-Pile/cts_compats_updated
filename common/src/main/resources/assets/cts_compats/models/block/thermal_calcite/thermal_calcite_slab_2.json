@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "biomesoplenty:block/thermal_calcite_2",
-    "side": "biomesoplenty:block/thermal_calcite_2",
-    "top": "biomesoplenty:block/thermal_calcite_2"
-  }
-}

@@ -16,7 +16,6 @@ import static net.dusty_dusty.cts_compats.resources.AssetUtils.TextureType;
 import static net.dusty_dusty.cts_compats.resources.AssetUtils.ModelData;
 import static net.dusty_dusty.cts_compats.resources.ResourceOptions.BlockModelOption;
 
-// TODO: Better tintindex handling
 final class SlabAssetJson {
     private static final Logger LOGGER = LogUtils.getLogger();
 
@@ -154,6 +153,7 @@ final class SlabAssetJson {
                 if (parts[1].equals("true")) {
                     schemeString.append("_").append(parts[0].toLowerCase());
                 } else if (parts[1].equals("false")) {
+                    // Filter clause
                 } else {
                     schemeString.append("_").append(parts[1].toLowerCase());
                 }

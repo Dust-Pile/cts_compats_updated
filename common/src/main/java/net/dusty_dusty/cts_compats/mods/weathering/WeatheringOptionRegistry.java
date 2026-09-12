@@ -2,8 +2,6 @@ package net.dusty_dusty.cts_compats.mods.weathering;
 
 import net.dusty_dusty.cts_compats.registry.AbstractOptionRegistry;
 
-import java.util.Set;
-
 import static net.dusty_dusty.cts_compats.resources.ResourceOptions.BlockModelOption;
 
 public class WeatheringOptionRegistry extends AbstractOptionRegistry {
