@@ -12,7 +12,8 @@ public final class CTSCompatsFabric implements ModInitializer {
     private static final Set<String> OPTIONAL_MODS = Set.of(
             CTSCompats.BOP_MODID,
             CTSCompats.MEADOW_MODID,
-            CTSCompats.VB_MODID
+            CTSCompats.VB_MODID,
+            CTSCompats.IW_MODID
     );
     private static final Set<String> initializedOptionalMods = new HashSet<>();
     private static boolean initialized;
