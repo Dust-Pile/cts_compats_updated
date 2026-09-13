@@ -36,6 +36,11 @@ public class PermafrostSlab extends GravityAffectedSlab {
     }
 
     @Override
+    public boolean isRandomlyTicking(BlockState state) {
+        return true;
+    }
+
+    @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (((PermafrostBlock) ModBlocks.PERMAFROST ).canMelt(level, pos)) {
             level.scheduleTick(pos, this, this.getDelayAfterPlace());

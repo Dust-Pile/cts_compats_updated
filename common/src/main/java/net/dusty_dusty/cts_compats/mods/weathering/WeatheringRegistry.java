@@ -2,6 +2,7 @@ package net.dusty_dusty.cts_compats.mods.weathering;
 
 import com.ordana.immersive_weathering.reg.ModBlocks;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.countered.terrainslabs.block.customslabs.apiSlabs.FallableSnowySpreadableSlab;
 import net.countered.terrainslabs.block.customslabs.soilslabs.SnowySpreadableSlab;
 import net.countered.terrainslabs.block.customslabs.specialslabs.CustomSlab;
 import net.countered.terrainslabs.block.customslabs.specialslabs.GravityAffectedSlab;
@@ -28,15 +29,15 @@ public class WeatheringRegistry extends AbstractRegistry {
         super(modId);
     }
 
-//    public static final RegistrySupplier<Block> EARTHEN_CLAY_SLAB = INSTANCE.registerBlock( "earthen_clay_slab",
-//            () -> new EarthenClaySlab(ModBlocks.EARTHEN_CLAY.get()) );
-//    public static final RegistrySupplier<Block> GRASSY_EARTHEN_CLAY_SLAB = INSTANCE.registerBlock( "grassy_earthen_clay_slab",
-//            () -> new GrassyEarthenClaySlab(ModBlocks.GRASSY_EARTHEN_CLAY.get(), (ISlabCopy) EARTHEN_CLAY_SLAB.get()) );
+    public static final RegistrySupplier<Block> EARTHEN_CLAY_SLAB = INSTANCE.registerBlock( "earthen_clay_slab",
+            () -> new EarthenClaySlab(ModBlocks.EARTHEN_CLAY.get()) );
+    public static final RegistrySupplier<Block> GRASSY_EARTHEN_CLAY_SLAB = INSTANCE.registerBlock( "grassy_earthen_clay_slab",
+            () -> new GrassyEarthenClaySlab(ModBlocks.GRASSY_EARTHEN_CLAY.get(), (ISlabCopy) EARTHEN_CLAY_SLAB.get()) );
 
     public static final RegistrySupplier<Block> SANDY_DIRT_SLAB = INSTANCE.registerBlock( "sandy_dirt_slab",
                 () -> new GravityAffectedSlab(ModBlocks.SANDY_DIRT.get()) );
     public static final RegistrySupplier<Block> GRASSY_SANDY_DIRT_SLAB = INSTANCE.registerBlockCutoutMipped( "grassy_sandy_dirt_slab",
-            () -> new GrassySandyDirtSlab(ModBlocks.GRASSY_SANDY_DIRT.get(), (ISlabCopy) WeatheringRegistry.SANDY_DIRT_SLAB.get()) );
+            () -> new FallableSnowySpreadableSlab(ModBlocks.GRASSY_SANDY_DIRT.get(), (ISlabCopy) WeatheringRegistry.SANDY_DIRT_SLAB.get()) );
 
     public static final RegistrySupplier<Block> SILT_SLAB = INSTANCE.registerBlock( "silt_slab",
             () -> new CustomSlab(ModBlocks.SILT.get()) );
@@ -51,7 +52,8 @@ public class WeatheringRegistry extends AbstractRegistry {
     public static final RegistrySupplier<Block> LOAM_SLAB = INSTANCE.registerBlock( "loam_slab",
             () -> new CustomDuelSlab(ModBlocks.LOAM.get(), (ISlabCopy) ModBlocksRegistry.DIRT_SLAB.get()) );
     public static final RegistrySupplier<Block> ROOTED_GRASS_SLAB = INSTANCE.registerBlockCutoutMipped( "rooted_grass_slab",
-            () -> new RootedGrassSlab(ModBlocks.ROOTED_GRASS_BLOCK.get(), (ISlabCopy) ModBlocksRegistry.ROOTED_DIRT_SLAB.get()) );
+            () -> new RootedGrassSlab(ModBlocks.ROOTED_GRASS_BLOCK.get(), (ISlabCopy) ModBlocksRegistry.ROOTED_DIRT_SLAB.get(),
+                    (ISlabCopy) ModBlocksRegistry.DIRT_SLAB.get()) );
 
 
 

@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.NotNull;
@@ -25,18 +26,27 @@ public class GrassyEarthenClaySlab extends SnowySpreadableSlab {
 
     public GrassyEarthenClaySlab(Block block, ISlabCopy duel) {
         super(block, duel);
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(HALF_WATERLOGGED, false)
+                .setValue(WATERLOGGED, false)
+                .setValue(TYPE, SlabType.BOTTOM)
+                .setValue(GENERATED, false)
+                .setValue(SNOWY, false));
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> stateManager) {
-        stateManager.add(HALF_WATERLOGGED);
+        stateManager.add(HALF_WATERLOGGED, WATERLOGGED, TYPE, GENERATED, SNOWY);
     }
 
+    @Override
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState superState = super.getStateForPlacement(context);
         assert superState != null;
         return superState.getValue(WATERLOGGED) ? superState.setValue(HALF_WATERLOGGED, true) : superState;
     }
 
+    @Override
     public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED) || state.getValue(HALF_WATERLOGGED)) {
             level.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
@@ -46,6 +56,7 @@ public class GrassyEarthenClaySlab extends SnowySpreadableSlab {
         return state;
     }
 
+    @Override
     public @NotNull FluidState getFluidState(BlockState state) {
         if (state.getValue(WATERLOGGED)) {
             return Fluids.WATER.getSource(false);
@@ -56,10 +67,12 @@ public class GrassyEarthenClaySlab extends SnowySpreadableSlab {
         return super.getFluidState(state);
     }
 
+    @Override
     public boolean isRandomlyTicking(BlockState state) {
         return true;
     }
 
+    @Override
     public void randomTick(BlockState blockState, ServerLevel serverLevel, BlockPos pos, RandomSource randomSource) {
         if (!blockState.getValue(WATERLOGGED)) {
             if ((blockState.getValue(HALF_WATERLOGGED) || !serverLevel.isRainingAt(pos.above())) && !EarthenClayBlock.isNearWater(serverLevel, pos)) {

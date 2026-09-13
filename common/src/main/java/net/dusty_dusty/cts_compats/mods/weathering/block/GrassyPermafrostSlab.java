@@ -36,7 +36,7 @@ public class GrassyPermafrostSlab extends FallableSnowySpreadableSlab {
 
     @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (((PermafrostBlock) ModBlocks.PERMAFROST ).canMelt(level, pos)) {
+        if (((PermafrostBlock) ModBlocks.PERMAFROST.get() ).canMelt(level, pos)) {
             level.scheduleTick(pos, this, this.getDelayAfterPlace());
         }
         if (!BaseSoilBlockFallable.canBeGrass(state, level, pos)) {

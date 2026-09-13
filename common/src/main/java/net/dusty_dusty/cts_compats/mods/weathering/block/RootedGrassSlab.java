@@ -19,14 +19,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
+// TODO: Allow source modification of target
 public class RootedGrassSlab extends SnowySpreadableSlab {
-    public RootedGrassSlab(Block block, ISlabCopy duel) {
-        super(block, duel);
-    }
+    @SuppressWarnings("FieldCanBeLocal")
+    private final Block rootable;
 
-    @Override
-    protected boolean canSpread() {
-        return false;
+    public RootedGrassSlab(Block block, ISlabCopy duel, ISlabCopy rootable) {
+        super(block, duel);
+        this.rootable = rootable.getBlock();
     }
 
     @SuppressWarnings("deprecation")
