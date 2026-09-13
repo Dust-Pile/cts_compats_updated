@@ -108,7 +108,7 @@ public final class SlabClientResources extends DynClientResourcesGenerator {
         }
 
         Map<String, AssetUtils.ModelData> originModels = new HashMap<>();
-        for (Map.Entry<String, JsonElement> variant : blockStates.get("variants").getAsJsonObject().asMap().entrySet()) {
+        for (Map.Entry<String, JsonElement> variant : blockStates.get("variants").getAsJsonObject().entrySet()) {
             String model;
             if (variant.getValue().isJsonArray()) {
                 model = variant.getValue().getAsJsonArray().get(0)

@@ -1,6 +1,6 @@
 package net.dusty_dusty.cts_compats.mods.weathering.block;
 
-import net.countered.terrainslabs.block.customslabs.soilslabs.SnowyGrassySlab;
+import net.countered.terrainslabs.block.customslabs.soilslabs.SnowySpreadableSlab;
 import net.countered.terrainslabs.block.interfaces.ISlabCopy;
 import net.countered.terrainslabs.registries.ModBlocksRegistry;
 import net.minecraft.core.BlockPos;
@@ -19,12 +19,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
-public class RootedGrassSlab extends SnowyGrassySlab {
+public class RootedGrassSlab extends SnowySpreadableSlab {
     public RootedGrassSlab(Block block, ISlabCopy duel) {
-        super(block, duel, false);
+        super(block, duel);
+    }
+
+    @Override
+    protected boolean canSpread() {
+        return false;
     }
 
     @SuppressWarnings("deprecation")
+    @Override
     public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         ItemStack stack = player.getItemInHand(hand);
         Item item = stack.getItem();

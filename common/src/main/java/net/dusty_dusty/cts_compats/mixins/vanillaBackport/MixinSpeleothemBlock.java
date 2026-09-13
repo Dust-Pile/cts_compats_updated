@@ -14,9 +14,11 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DripstoneThickness;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin( SpeleothemBlock.class )
+@Pseudo
+@Mixin( remap = false, value = SpeleothemBlock.class )
 public class MixinSpeleothemBlock implements ISpikeConversion<DripstoneThickness>, IConditionalOffset {
 
     @Override

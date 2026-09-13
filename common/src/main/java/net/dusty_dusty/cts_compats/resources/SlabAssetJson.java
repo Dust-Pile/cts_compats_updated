@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 import static net.dusty_dusty.cts_compats.resources.AssetUtils.TextureType;
 import static net.dusty_dusty.cts_compats.resources.AssetUtils.ModelData;
-import static net.dusty_dusty.cts_compats.resources.ResourceOptions.BlockModelOption;
+import static net.dusty_dusty.cts_compats.resources.ResourceOptions.BlockModelFlags;
 
 final class SlabAssetJson {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -27,7 +27,7 @@ final class SlabAssetJson {
 
     final Map<String, AssetUtils.TextureSet> textures;
     final Map<String, String> nameScheme;
-    final Set<BlockModelOption> options;
+    final Set<BlockModelFlags> options;
 
     private final Map<ResourceLocation, JsonObject> models = new HashMap<>();
 
@@ -41,7 +41,7 @@ final class SlabAssetJson {
         this.originId = originId;
         textures = getAllTextures(manager);
         nameScheme = getNameScheme();
-        options = AbstractOptionRegistry.getGlobalOptions().getOptions(BlockModelOption.class, slabBlock);
+        options = AbstractOptionRegistry.getGlobalOptions().getOptions(BlockModelFlags.class, slabBlock);
     }
 
     SlabAssets create() {
@@ -90,9 +90,12 @@ final class SlabAssetJson {
         model.addProperty("parent", AssetUtils.BLOCK_PARENT);
         model.add("textures", getTexturesObject(textureSet));
 
-        JsonObject topModel = model.deepCopy();
-        topModel.add("elements", topElements);
+        JsonObject topModel = new JsonObject();
+        topModel.addProperty("parent", AssetUtils.BLOCK_PARENT);
+        topModel.add("textures", getTexturesObject(textureSet));
+
         model.add("elements", bottomElements);
+        topModel.add("elements", topElements);
 
         return Map.ofEntries( Map.entry(bottomName, model),
                 Map.entry(topName, topModel) );
@@ -211,10 +214,10 @@ final class SlabAssetJson {
         if (type.equals("top") || type.equals("bottom")) {
             return AssetUtils.fillArray(new JsonArray(), 0, 0, 16, 16);
         }
-        boolean offset = type.equals("side") ? options.contains(BlockModelOption.UV_OFF_BY_ONE)
-                : options.contains(BlockModelOption.UV_OFF_BY_ONE_OVERLAY);
-        boolean topEdge = type.equals("side") ? options.contains(BlockModelOption.UV_TOP_EDGE)
-                : options.contains(BlockModelOption.UV_TOP_EDGE_OVERLAY);
+        boolean offset = type.equals("side") ? options.contains(BlockModelFlags.UV_OFF_BY_ONE)
+                : options.contains(BlockModelFlags.UV_OFF_BY_ONE_OVERLAY);
+        boolean topEdge = type.equals("side") ? options.contains(BlockModelFlags.UV_TOP_EDGE)
+                : options.contains(BlockModelFlags.UV_TOP_EDGE_OVERLAY);
         if (topEdge || isTop) {
             return AssetUtils.fillArray(new JsonArray(), 0, offset ? 1 : 0, 16, offset ? 9 : 8);
         } else {

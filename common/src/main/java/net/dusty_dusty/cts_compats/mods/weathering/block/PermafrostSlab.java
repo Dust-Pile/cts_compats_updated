@@ -10,12 +10,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.SlabType;
-import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("deprecation")
 public class PermafrostSlab extends GravityAffectedSlab {
@@ -28,19 +26,23 @@ public class PermafrostSlab extends GravityAffectedSlab {
     }
 
     @Override
+    protected boolean canPlaceAsTop() {
+        return true;
+    }
+
+    @Override
+    protected boolean scheduleFallOnUpdate() {
+        return false;
+    }
+
+    @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (((PermafrostBlock) ModBlocks.PERMAFROST ).canMelt(level, pos)) {
             level.scheduleTick(pos, this, this.getDelayAfterPlace());
         }
     }
 
-    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
-    }
-
-    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-        return state;
-    }
-
+    @Override
     public void onLand(Level level, BlockPos pos, BlockState state, BlockState replaceableState, FallingBlockEntity fallingBlock) {
         if (level.random.nextBoolean()) {
             level.destroyBlock(pos, false);

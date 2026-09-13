@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @SuppressWarnings({"MixinAnnotationTarget", "InvalidInjectorMethodSignature"})
-@Mixin( targets = {
+@Mixin( remap = false, targets = {
         "dev.orderedchaos.projectvibrantjourneys.common.blocks.CindercaneBlock",
         "dev.orderedchaos.projectvibrantjourneys.common.blocks.FallenLeavesBlock",
         "dev.orderedchaos.projectvibrantjourneys.common.blocks.GroundcoverBlock",

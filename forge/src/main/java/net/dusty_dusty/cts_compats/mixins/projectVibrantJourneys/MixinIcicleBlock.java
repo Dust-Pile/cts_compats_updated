@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.properties.DripstoneThickness;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin( IcicleBlock.class )
+@Mixin( remap = false, value = IcicleBlock.class )
 public class MixinIcicleBlock implements ISpikeConversion<DripstoneThickness>, IConditionalOffset {
 
     @Override

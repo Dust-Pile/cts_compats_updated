@@ -3,6 +3,7 @@ package net.dusty_dusty.cts_compats.resources;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.mojang.logging.LogUtils;
 import net.mehvahdjukaar.moonlight.api.resources.ResType;
 import net.mehvahdjukaar.moonlight.api.resources.StaticResource;
@@ -84,13 +85,13 @@ public final class AssetUtils {
     static JsonArray fillArray(JsonArray array, Object... members) {
         for (Object member : members) {
             if (member instanceof Number) {
-                array.add((Number) member);
+                array.add(new JsonPrimitive((Number) member));
             } else if (member instanceof String) {
-                array.add((String) member);
+                array.add(new JsonPrimitive((String) member));
             } else if (member instanceof Boolean) {
-                array.add((Boolean) member);
+                array.add(new JsonPrimitive((Boolean) member));
             } else if (member instanceof Character) {
-                array.add((Character) member);
+                array.add(new JsonPrimitive((Character) member));
             } else if (member instanceof JsonElement) {
                 array.add((JsonElement) member);
             } else {
@@ -166,7 +167,7 @@ public final class AssetUtils {
 
     private static Map<TextureType, CuboidTexture> addNewTextures(Map<TextureType, CuboidTexture> map, ModelData modelData) {
         JsonObject textures = modelData.model().getAsJsonObject("textures");
-        for (Map.Entry<String, JsonElement> texture: textures.asMap().entrySet()) {
+        for (Map.Entry<String, JsonElement> texture: textures.entrySet()) {
             try {
                 TextureType type = TextureType.valueOf(texture.getKey().toUpperCase());
                 map.putIfAbsent(type, new CuboidTexture(texture.getValue().getAsString(), getTintIndex(modelData, type)));
@@ -183,7 +184,8 @@ public final class AssetUtils {
             return -1;
         }
         for (JsonElement element : elements) {
-            for (JsonElement face : element.getAsJsonObject().get("faces").getAsJsonObject().asMap().values()) {
+            for (Map.Entry<String, JsonElement> faceEntry : element.getAsJsonObject().get("faces").getAsJsonObject().entrySet()) {
+                JsonElement face = faceEntry.getValue();
                 if (face == null) continue;
                 JsonElement texture = face.getAsJsonObject().get("texture");
                 if (texture != null && texture.getAsString().equals("#" + type.toString())
