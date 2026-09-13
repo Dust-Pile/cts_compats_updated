@@ -67,7 +67,7 @@ configurations {
     developmentFabric.extendsFrom common
 }
 
-def terrainSlabsCoordinate = "curse.maven:countereds-terrain-slabs-1125437:8825299"
+def terrainSlabsCoordinate = "curse.maven:countereds-terrain-slabs-1125437:8872777"
 def vanillaBackportCoordinate = "maven.modrinth:6xwxDTgf:KbcStX3T"
 def nestedRuntimeArtifactType = "fabric-nested-runtime-jars"
 def includeOptionalMods = providers.gradleProperty("fabricOptionalMods").map { it.toBoolean() }.orElse(true)

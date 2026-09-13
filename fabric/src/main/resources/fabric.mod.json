@@ -28,7 +28,7 @@
     "moonlight": ">=${moonlight_version}",
     "minecraft": "${minecraft_version}",
     "java": ">=17",
-    "terrain_slabs": ">=4.0.3-beta"
+    "terrain_slabs": ">=4.1.0-beta"
   },
   "suggests": {
     "biomesoplenty": ">=19.0.0.96",

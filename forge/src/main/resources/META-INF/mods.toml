@@ -72,7 +72,7 @@ description='''${mod_description}'''
 [[dependencies.${mod_id}]]
     modId="terrain_slabs"
     mandatory=true
-    versionRange="[4.0.4-beta,)"
+    versionRange="[4.1.0-beta,)"
     ordering="AFTER"
     side="BOTH"
 [[dependencies.${mod_id}]]

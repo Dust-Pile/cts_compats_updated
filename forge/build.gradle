@@ -30,7 +30,7 @@ dependencies {
     forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
     modImplementation "dev.architectury:architectury-forge:${rootProject.architectury_version}"
     modImplementation("net.mehvahdjukaar:moonlight-forge:${rootProject.moonlight_version}:forge") { transitive = false }
-    modImplementation "curse.maven:countereds-terrain-slabs-1125437:8825307"
+    modImplementation "curse.maven:countereds-terrain-slabs-1125437:8872772"
     modRuntimeOnly "maven.modrinth:codAaoxh:EVVb5nP3"
     compileOnly "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
 
