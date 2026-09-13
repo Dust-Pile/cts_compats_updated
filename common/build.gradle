@@ -18,6 +18,7 @@ dependencies {
     modCompileOnly "maven.modrinth:6xwxDTgf:KbcStX3T"
     modCompileOnly "curse.maven:immersive-weathering-forge-592449:6116941"
 
+    compileOnly(annotationProcessor("org.spongepowered:mixin:0.8.5:processor"))
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.4"))
 
     testImplementation "org.junit.jupiter:junit-jupiter:5.10.2"
