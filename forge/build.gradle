@@ -34,10 +34,10 @@ dependencies {
     modRuntimeOnly "maven.modrinth:codAaoxh:EVVb5nP3"
     compileOnly "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
 
-    compileOnly(annotationProcessor("org.spongepowered:mixin:0.8.5:processor"))
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.4"))
     implementation(include("io.github.llamalad7:mixinextras-forge:0.5.4"))
     modRuntimeOnly "curse.maven:polymixin-1670134:8744788"
+
     modCompileOnly "curse.maven:quark-243121:6427817"
     modCompileOnly "curse.maven:immersive-weathering-forge-592449:6116941"
     modCompileOnly "curse.maven:lets-do-meadow-821483:6467344"

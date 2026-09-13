@@ -92,9 +92,6 @@ dependencies {
     nestedRuntimeMods terrainSlabsCoordinate
     modLocalRuntime files(configurations.nestedRuntimeMods)
 
-    compileOnly(annotationProcessor("org.spongepowered:mixin:0.8.5:processor"))
-    implementation(include("io.github.llamalad7:mixinextras-fabric:0.5.4"))
-
     if (includeOptionalMods.get()) {
         modRuntimeOnly "maven.modrinth:HXF82T3G:eZaag2ca"
         modRuntimeOnly "maven.modrinth:ra7o6Sl7:phaFB3JP"
