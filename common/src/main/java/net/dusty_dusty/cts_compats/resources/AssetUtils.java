@@ -186,7 +186,6 @@ public final class AssetUtils {
         for (JsonElement element : elements) {
             for (Map.Entry<String, JsonElement> faceEntry : element.getAsJsonObject().get("faces").getAsJsonObject().entrySet()) {
                 JsonElement face = faceEntry.getValue();
-                if (face == null) continue;
                 JsonElement texture = face.getAsJsonObject().get("texture");
                 if (texture != null && texture.getAsString().equals("#" + type.toString())
                         && face.getAsJsonObject().has("tintindex")

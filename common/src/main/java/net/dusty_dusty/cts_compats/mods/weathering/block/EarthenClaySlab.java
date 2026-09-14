@@ -48,10 +48,10 @@ public class EarthenClaySlab extends CustomSlab {
     public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED) || state.getValue(HALF_WATERLOGGED)) {
             level.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
-            state.setValue(HALF_WATERLOGGED, true);
+            state = state.setValue(HALF_WATERLOGGED, true);
         }
 
-        return state;
+        return super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class EarthenClaySlab extends CustomSlab {
         if (state.getValue(WATERLOGGED)) {
             return Fluids.WATER.getSource(false);
         } else if (state.getValue(HALF_WATERLOGGED)) {
-            return Fluids.FLOWING_LAVA.defaultFluidState().setValue(BlockStateProperties.LEVEL_FLOWING, 4);
+            return Fluids.FLOWING_WATER.defaultFluidState().setValue(BlockStateProperties.LEVEL_FLOWING, 1);
         }
 
         return super.getFluidState(state);

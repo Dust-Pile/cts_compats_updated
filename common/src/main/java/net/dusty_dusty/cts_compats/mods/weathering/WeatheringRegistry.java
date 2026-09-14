@@ -31,7 +31,7 @@ public class WeatheringRegistry extends AbstractRegistry {
 
     public static final RegistrySupplier<Block> EARTHEN_CLAY_SLAB = INSTANCE.registerBlock( "earthen_clay_slab",
             () -> new EarthenClaySlab(ModBlocks.EARTHEN_CLAY.get()) );
-    public static final RegistrySupplier<Block> GRASSY_EARTHEN_CLAY_SLAB = INSTANCE.registerBlock( "grassy_earthen_clay_slab",
+    public static final RegistrySupplier<Block> GRASSY_EARTHEN_CLAY_SLAB = INSTANCE.registerBlockCutout( "grassy_earthen_clay_slab",
             () -> new GrassyEarthenClaySlab(ModBlocks.GRASSY_EARTHEN_CLAY.get(), (ISlabCopy) EARTHEN_CLAY_SLAB.get()) );
 
     public static final RegistrySupplier<Block> SANDY_DIRT_SLAB = INSTANCE.registerBlock( "sandy_dirt_slab",

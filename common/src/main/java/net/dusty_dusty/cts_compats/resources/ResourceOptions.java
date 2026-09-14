@@ -1,11 +1,12 @@
 package net.dusty_dusty.cts_compats.resources;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
 public final class ResourceOptions {
     public static Set<Class<? extends IResourceOption>> availableTypes() {
-        return Set.of(BlockModelFlags.class);
+        return Set.of(BlockModelFlags.class, VariantModifier.class);
     }
 
     public interface IResourceOption {}
@@ -28,9 +29,19 @@ public final class ResourceOptions {
         public String modify(String variantString) {
             return variantModifier.apply(variantString);
         }
+
+        static VariantModifier variantModifierOf(Function<String, String> modifier) { return new VariantModifier(modifier);}
+        static String modifyWith(String label, Set<VariantModifier> options) {
+            if (options.size() > 1) {
+                throw new UnsupportedOperationException("Cannot apply multiple Variant Modifiers.");
+            }
+            return options.stream().findFirst().orElse(variantModifierOf(s->s)).modify(label);
+        }
     }
     public static VariantModifier variantModifierOf(Function<String, String> modifier) {
-        return new VariantModifier(modifier);
+        return VariantModifier.variantModifierOf(modifier);
     }
-
+    public static String modifyWith(String label, Set<VariantModifier> options) {
+        return VariantModifier.modifyWith(label, options);
+    }
 }

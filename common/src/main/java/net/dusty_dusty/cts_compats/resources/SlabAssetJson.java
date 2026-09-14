@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.logging.LogUtils;
 import net.dusty_dusty.cts_compats.registry.AbstractOptionRegistry;
+import net.dusty_dusty.cts_compats.registry.IResourceOptionRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.level.block.Block;
@@ -15,9 +16,11 @@ import java.util.regex.Pattern;
 import static net.dusty_dusty.cts_compats.resources.AssetUtils.TextureType;
 import static net.dusty_dusty.cts_compats.resources.AssetUtils.ModelData;
 import static net.dusty_dusty.cts_compats.resources.ResourceOptions.BlockModelFlags;
+import static net.dusty_dusty.cts_compats.resources.ResourceOptions.VariantModifier;
 
 final class SlabAssetJson {
     private static final Logger LOGGER = LogUtils.getLogger();
+    private static final IResourceOptionRegistry OPT_ACCESS = AbstractOptionRegistry.getGlobalOptions();
 
     final Block slabBlock;
     final JsonObject originBlockStates;
@@ -27,7 +30,7 @@ final class SlabAssetJson {
 
     final Map<String, AssetUtils.TextureSet> textures;
     final Map<String, String> nameScheme;
-    final Set<BlockModelFlags> options;
+    final Set<BlockModelFlags> modelFlags;
 
     private final Map<ResourceLocation, JsonObject> models = new HashMap<>();
 
@@ -41,7 +44,7 @@ final class SlabAssetJson {
         this.originId = originId;
         textures = getAllTextures(manager);
         nameScheme = getNameScheme();
-        options = AbstractOptionRegistry.getGlobalOptions().getOptions(BlockModelFlags.class, slabBlock);
+        modelFlags = OPT_ACCESS.getOptions(BlockModelFlags.class, slabBlock);
     }
 
     SlabAssets create() {
@@ -57,6 +60,7 @@ final class SlabAssetJson {
 
             models.putAll(generateModels(textures.get(variantLabel), bottomName, topName));
 
+            variantLabel = ResourceOptions.modifyWith(variantLabel, OPT_ACCESS.getOptions(VariantModifier.class, slabBlock));
             slabVariants.add("type=bottom," + variantLabel, AssetUtils.variant(AssetUtils.blockModel(bottomName)));
             slabVariants.add("type=double," + variantLabel, AssetUtils.variant(AssetUtils.blockModel(variant.getValue().modelId())));
             slabVariants.add("type=top," + variantLabel, AssetUtils.variant(AssetUtils.blockModel(topName)));
@@ -214,10 +218,10 @@ final class SlabAssetJson {
         if (type.equals("top") || type.equals("bottom")) {
             return AssetUtils.fillArray(new JsonArray(), 0, 0, 16, 16);
         }
-        boolean offset = type.equals("side") ? options.contains(BlockModelFlags.UV_OFF_BY_ONE)
-                : options.contains(BlockModelFlags.UV_OFF_BY_ONE_OVERLAY);
-        boolean topEdge = type.equals("side") ? options.contains(BlockModelFlags.UV_TOP_EDGE)
-                : options.contains(BlockModelFlags.UV_TOP_EDGE_OVERLAY);
+        boolean offset = type.equals("side") ? modelFlags.contains(BlockModelFlags.UV_OFF_BY_ONE)
+                : modelFlags.contains(BlockModelFlags.UV_OFF_BY_ONE_OVERLAY);
+        boolean topEdge = type.equals("side") ? modelFlags.contains(BlockModelFlags.UV_TOP_EDGE)
+                : modelFlags.contains(BlockModelFlags.UV_TOP_EDGE_OVERLAY);
         if (topEdge || isTop) {
             return AssetUtils.fillArray(new JsonArray(), 0, offset ? 1 : 0, 16, offset ? 9 : 8);
         } else {

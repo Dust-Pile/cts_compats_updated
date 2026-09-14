@@ -12,7 +12,7 @@ public interface IResourceOptionRegistry {
 
     void register();
 
-    default <T> Set<T> getOptions(Class<?> clazz, Block block) {
+    default <T> Set<T> getOptions(Class<T> clazz, Block block) {
         String[] components = block.getDescriptionId().split("\\.");
         return this.getOptions(clazz, components[1] + ":" + components[2]);
     }

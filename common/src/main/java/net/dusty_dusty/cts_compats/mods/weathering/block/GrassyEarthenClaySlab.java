@@ -3,6 +3,7 @@ package net.dusty_dusty.cts_compats.mods.weathering.block;
 import com.ordana.immersive_weathering.blocks.soil_types.EarthenClayBlock;
 import net.countered.terrainslabs.block.customslabs.soilslabs.SnowySpreadableSlab;
 import net.countered.terrainslabs.block.interfaces.ISlabCopy;
+import net.dusty_dusty.cts_compats.mods.weathering.WeatheringRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -50,21 +51,15 @@ public class GrassyEarthenClaySlab extends SnowySpreadableSlab {
     public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED) || state.getValue(HALF_WATERLOGGED)) {
             level.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
-            state.setValue(HALF_WATERLOGGED, true);
+            state = state.setValue(HALF_WATERLOGGED, true);
         }
 
-        return state;
+        return super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
     }
 
     @Override
     public @NotNull FluidState getFluidState(BlockState state) {
-        if (state.getValue(WATERLOGGED)) {
-            return Fluids.WATER.getSource(false);
-        } else if (state.getValue(HALF_WATERLOGGED)) {
-            return Fluids.WATER.defaultFluidState().setValue(BlockStateProperties.LEVEL_FLOWING, 4);
-        }
-
-        return super.getFluidState(state);
+        return WeatheringRegistry.EARTHEN_CLAY_SLAB.get().getFluidState(state);
     }
 
     @Override

@@ -12,7 +12,7 @@ public final class WeatheringColorRegistry extends AbstractColorRegistry {
     @Override
     public void registerBlockColors() {
         ColorHandlerRegistry.registerBlockColors(getGrassColor(),
-//                WeatheringRegistry.GRASSY_EARTHEN_CLAY_SLAB,
+                WeatheringRegistry.GRASSY_EARTHEN_CLAY_SLAB,
                 WeatheringRegistry.GRASSY_SANDY_DIRT_SLAB,
                 WeatheringRegistry.GRASSY_SILT_SLAB,
                 WeatheringRegistry.GRASSY_PERMAFROST,
@@ -28,7 +28,7 @@ public final class WeatheringColorRegistry extends AbstractColorRegistry {
                     BlockState state = Blocks.GRASS.defaultBlockState();
                     return blockColors.getColor(state, null, null, tintIndex);
                 },
-//                WeatheringRegistry.GRASSY_EARTHEN_CLAY_SLAB,
+                WeatheringRegistry.GRASSY_EARTHEN_CLAY_SLAB,
                 WeatheringRegistry.GRASSY_SANDY_DIRT_SLAB,
                 WeatheringRegistry.GRASSY_SILT_SLAB,
                 WeatheringRegistry.GRASSY_PERMAFROST,
