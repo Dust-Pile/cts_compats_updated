@@ -152,7 +152,7 @@ public final class AssetUtils {
             if (parentSet != null) {
                 for (Map.Entry<TextureType, CuboidTexture> texture : parentSet.textures().entrySet()) {
                     map.merge(texture.getKey(), texture.getValue(), (oldValue, value) -> {
-                        if (oldValue.tintIndex < 0 && value.tintIndex >= 0) {
+                        if (oldValue.tintIndex == -2 && value.tintIndex >= 0) {
                             return new CuboidTexture(oldValue.name, value.tintIndex);
                         }
                         return oldValue;
@@ -181,7 +181,7 @@ public final class AssetUtils {
         JsonObject model = modelData.model();
         JsonArray elements = model.getAsJsonArray("elements");
         if (elements == null) {
-            return -1;
+            return -2; // Separate identifier for "No Data" vs "No Tintindex"
         }
         for (JsonElement element : elements) {
             for (Map.Entry<String, JsonElement> faceEntry : element.getAsJsonObject().get("faces").getAsJsonObject().entrySet()) {

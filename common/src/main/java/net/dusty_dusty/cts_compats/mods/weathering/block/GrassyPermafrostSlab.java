@@ -34,6 +34,10 @@ public class GrassyPermafrostSlab extends FallableSnowySpreadableSlab {
         return false;
     }
 
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {}
+
     @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (((PermafrostBlock) ModBlocks.PERMAFROST.get() ).canMelt(level, pos)) {

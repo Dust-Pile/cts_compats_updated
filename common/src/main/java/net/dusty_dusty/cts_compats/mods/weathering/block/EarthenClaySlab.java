@@ -11,7 +11,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.material.FluidState;
@@ -56,11 +55,11 @@ public class EarthenClaySlab extends CustomSlab {
 
     @Override
     public @NotNull FluidState getFluidState(BlockState state) {
-        if (state.getValue(WATERLOGGED)) {
-            return Fluids.WATER.getSource(false);
-        } else if (state.getValue(HALF_WATERLOGGED)) {
-            return Fluids.FLOWING_WATER.defaultFluidState().setValue(BlockStateProperties.LEVEL_FLOWING, 1);
-        }
+//        if (state.getValue(WATERLOGGED)) {
+//            return Fluids.WATER.getSource(false);
+//        } else if (state.getValue(HALF_WATERLOGGED)) {
+//            return Fluids.FLOWING_WATER.defaultFluidState().setValue(BlockStateProperties.LEVEL_FLOWING, 1);
+//        }
 
         return super.getFluidState(state);
     }
