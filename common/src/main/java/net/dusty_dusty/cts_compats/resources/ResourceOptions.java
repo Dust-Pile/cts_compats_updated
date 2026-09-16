@@ -6,7 +6,7 @@ import java.util.function.Function;
 
 public final class ResourceOptions {
     public static Set<Class<? extends IResourceOption>> availableTypes() {
-        return Set.of(BlockModelFlags.class, VariantModifier.class);
+        return Set.of(BlockModelFlags.class, VariantModifier.class, ColorFlags.class);
     }
 
     public interface IResourceOption {}
@@ -17,6 +17,10 @@ public final class ResourceOptions {
         UV_TOP_EDGE_OVERLAY,
         UV_OFF_BY_ONE_OVERLAY,
         STATE_ALL_ROTATIONS
+    }
+
+    public enum ColorFlags implements IResourceOption {
+        GREENER_GRASS
     }
 
     public static class VariantModifier implements IResourceOption {

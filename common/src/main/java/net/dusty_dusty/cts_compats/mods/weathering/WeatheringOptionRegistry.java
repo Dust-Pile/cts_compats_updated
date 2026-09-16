@@ -25,6 +25,14 @@ public class WeatheringOptionRegistry extends AbstractOptionRegistry {
                         ResourceOptions.variantModifierOf(s -> s.replace("waterlogged", "half_waterlogged")),
                         WeatheringRegistry.EARTHEN_CLAY_SLAB.getId(),
                         WeatheringRegistry.GRASSY_EARTHEN_CLAY_SLAB.getId()
+                )
+                .addBlocksForOption(
+                        ResourceOptions.ColorFlags.GREENER_GRASS,
+                        WeatheringRegistry.GRASSY_EARTHEN_CLAY_SLAB.getId(),
+                        WeatheringRegistry.GRASSY_SANDY_DIRT_SLAB.getId(),
+                        WeatheringRegistry.GRASSY_SILT_SLAB.getId(),
+                        WeatheringRegistry.GRASSY_PERMAFROST.getId(),
+                        WeatheringRegistry.ROOTED_GRASS_SLAB.getId()
                 );
     }
 }
