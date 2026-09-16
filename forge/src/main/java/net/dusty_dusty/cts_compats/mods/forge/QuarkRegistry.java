@@ -3,11 +3,14 @@ package net.dusty_dusty.cts_compats.mods.forge;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.countered.terrainslabs.block.customslabs.specialslabs.CustomSlab;
 import net.dusty_dusty.cts_compats.CTSCompats;
+import net.dusty_dusty.cts_compats.registry.AbstractOptionRegistry;
 import net.dusty_dusty.cts_compats.registry.AbstractRegistry;
 import net.dusty_dusty.cts_compats.registry.IColorRegistry;
+import net.dusty_dusty.cts_compats.resources.ResourceOptions.ColorFlags;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.violetmoon.quark.content.client.module.GreenerGrassModule;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -31,5 +34,16 @@ public final class QuarkRegistry extends AbstractRegistry {
     @Override
     public Optional<Supplier<IColorRegistry>> getColorRegistry() {
         return Optional.empty();
+    }
+
+    @Override
+    public void clientSetup() {
+        AbstractOptionRegistry.getGlobalOptions().getOptionsOfType(ColorFlags.class)
+                .forEach((id, options) -> {
+                    if (options.contains(ColorFlags.GREENER_GRASS)
+                            && !GreenerGrassModule.blockList.contains(id)) {
+                        GreenerGrassModule.blockList.add(id);
+                    }
+                });
     }
 }

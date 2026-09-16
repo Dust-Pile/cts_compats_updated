@@ -7,6 +7,7 @@ import net.dusty_dusty.cts_compats.platform.BOPSlabFactory;
 import net.dusty_dusty.cts_compats.mods.biomesOPlenty.block.FleshSlab;
 import net.dusty_dusty.cts_compats.registry.AbstractRegistry;
 import net.dusty_dusty.cts_compats.registry.IColorRegistry;
+import net.dusty_dusty.cts_compats.registry.IResourceOptionRegistry;
 import net.minecraft.world.level.block.Block;
 
 import java.util.Optional;
@@ -28,6 +29,11 @@ public final class BOPBaseRegistry extends AbstractRegistry {
     @Override
     public Optional<Supplier<IColorRegistry>> getColorRegistry() {
         return colorRegistry;
+    }
+
+    @Override
+    public Optional<Supplier<IResourceOptionRegistry>> getResourceOptions() {
+        return Optional.of(BOPOptionRegistry::new);
     }
 
     // Overworld Blocks

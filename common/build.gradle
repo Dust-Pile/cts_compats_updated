@@ -11,6 +11,7 @@ dependencies {
     modApi "dev.architectury:architectury:${rootProject.architectury_version}"
     modApi("net.mehvahdjukaar:moonlight:${rootProject.moonlight_version}") { transitive = false }
     modCompileOnly "curse.maven:countereds-terrain-slabs-1125437:8872772"
+    modRuntimeOnly "curse.maven:countereds-terrain-slabs-1125437:8872772"
 
     // Compats
     modCompileOnly "maven.modrinth:HXF82T3G:eZaag2ca"
